@@ -38,6 +38,8 @@ namespace AzureDevOpsAPI
 
         protected HttpClient GetHttpClient()
         {
+            //logger.Info("Configuration.UriString ++++++++++++++################################" + Configuration.UriString);
+            //logger.Info("Configuration ++++++++++++++################################" + Configuration);
             var client = new HttpClient
             {
                 BaseAddress = new Uri(Configuration.UriString)
