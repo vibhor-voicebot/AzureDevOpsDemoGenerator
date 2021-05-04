@@ -1,4 +1,4 @@
-﻿using NLog;
+using NLog;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -31,7 +31,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     using (var client = GetHttpClient())
                     {
                         // connect to the REST endpoint            
-                        HttpResponseMessage response = client.GetAsync("_apis/projects?stateFilter=All&api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "_apis/projects?stateFilter=All&api-version=" + Configuration.VersionNumber).Result;
                         // check to see if we have a succesfull respond
                         return response.StatusCode == System.Net.HttpStatusCode.OK;
                     }
@@ -163,7 +163,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("_apis/projects/" + projectName + "?includeCapabilities=false&api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "_apis/projects/" + projectName + "?includeCapabilities=false&api-version=" + Configuration.VersionNumber).Result;
 
                         if (response.IsSuccessStatusCode)
                         {
@@ -211,7 +211,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("_apis/projects/" + project + "?includeCapabilities=true&api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "_apis/projects/" + project + "?includeCapabilities=true&api-version=" + Configuration.VersionNumber).Result;
 
                         if (response.IsSuccessStatusCode)
                         {
