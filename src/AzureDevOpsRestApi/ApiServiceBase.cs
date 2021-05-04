@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Diagnostics;
 
 namespace AzureDevOpsAPI
 {
@@ -38,7 +39,8 @@ namespace AzureDevOpsAPI
 
         protected HttpClient GetHttpClient()
         {
-            logger.Info("Configuration.UriString ++++++++++++++################################" + Configuration.UriString);
+            Debug.WriteLine("Configuration.UriString ++++++++++++++################################" + Configuration.UriString);
+            //logger.Info("Configuration.UriString ++++++++++++++################################" + Configuration.UriString);
             //logger.Info("Configuration ++++++++++++++################################" + Configuration);
             var client = new HttpClient
             {
