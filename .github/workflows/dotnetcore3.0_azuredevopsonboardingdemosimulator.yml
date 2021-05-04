@@ -22,10 +22,10 @@ jobs:
         dotnet-version: '3.1.301'
 
     - name: Build with dotnet
-      run: dotnet build AzureDevOpsDemoBuilder.csproj --configuration Release
+      run: dotnet build ./src/AzureDevOpsDemoBuilder/AzureDevOpsDemoBuilder.csproj --configuration Release
 
     - name: dotnet publish
-      run: dotnet publish AzureDevOpsDemoBuilder.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      run: dotnet publish ./src/AzureDevOpsDemoBuilder/AzureDevOpsDemoBuilder.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
