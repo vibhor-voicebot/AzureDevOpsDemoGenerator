@@ -31,7 +31,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     using (var client = GetHttpClient())
                     {
                         // connect to the REST endpoint            
-                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "_apis/projects?stateFilter=All&api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/_apis/projects?stateFilter=All&api-version=" + Configuration.VersionNumber).Result;
                         // check to see if we have a succesfull respond
                         return response.StatusCode == System.Net.HttpStatusCode.OK;
                     }
@@ -106,7 +106,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, client.BaseAddress + "_apis/projects?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, client.BaseAddress + "/_apis/projects?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.Accepted)
                         {
@@ -163,7 +163,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "_apis/projects/" + projectName + "?includeCapabilities=false&api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/_apis/projects/" + projectName + "?includeCapabilities=false&api-version=" + Configuration.VersionNumber).Result;
 
                         if (response.IsSuccessStatusCode)
                         {
@@ -211,7 +211,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "_apis/projects/" + project + "?includeCapabilities=true&api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/_apis/projects/" + project + "?includeCapabilities=true&api-version=" + Configuration.VersionNumber).Result;
 
                         if (response.IsSuccessStatusCode)
                         {
