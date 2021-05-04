@@ -1,4 +1,6 @@
-﻿@model AzureDevOpsDemoBuilder.Models.Project
+﻿@using Microsoft.AspNetCore.Http
+@model AzureDevOpsDemoBuilder.Models.Project
+
 @{
     ViewBag.Title = "Azure DevOps Onboarding Automation Framework Simulator";
 }
@@ -11,15 +13,14 @@
     <link rel="stylesheet" href="~/content/assets/css/custom.min.css">
     <link href="~/assets/templategrouping/templategroup.custom.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous">
-
     <script type="text/javascript">
-        var appInsights = window.appInsights || function (config) {
-            function i(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, u = document, e = window, o = "script", s = "AuthenticatedUserContext", h = "start", c = "stop", l = "Track", a = l + "Event", v = l + "Page", y = u.createElement(o), r, f; y.src = config.url || "https://az416426.vo.msecnd.net/scripts/a/ai.0.js"; u.getElementsByTagName(o)[0].parentNode.appendChild(y); try { t.cookie = u.cookie } catch (p) { } for (t.queue = [], t.version = "1.0", r = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; r.length;) i("track" + r.pop()); return i("set" + s), i("clear" + s), i(h + a), i(c + a), i(h + v), i(c + v), i("flush"), config.disableExceptionTracking || (r = "onerror", i("_" + r), f = e[r], e[r] = function (config, i, u, e, o) { var s = f && f(config, i, u, e, o); return s !== !0 && t["_" + r](config, i, u, e, o), s }), t
-        }({
-            instrumentationKey: "__AIKEY__"
+        !function (T, l, y) { var S = T.location, k = "script", D = "instrumentationKey", C = "ingestionendpoint", I = "disableExceptionTracking", E = "ai.device.", b = "toLowerCase", w = "crossOrigin", N = "POST", e = "appInsightsSDK", t = y.name || "appInsights"; (y.name || T[e]) && (T[e] = t); var n = T[t] || function (d) { var g = !1, f = !1, m = { initialize: !0, queue: [], sv: "5", version: 2, config: d }; function v(e, t) { var n = {}, a = "Browser"; return n[E + "id"] = a[b](), n[E + "type"] = a, n["ai.operation.name"] = S && S.pathname || "_unknown_", n["ai.internal.sdkVersion"] = "javascript:snippet_" + (m.sv || m.version), { time: function () { var e = new Date; function t(e) { var t = "" + e; return 1 === t.length && (t = "0" + t), t } return e.getUTCFullYear() + "-" + t(1 + e.getUTCMonth()) + "-" + t(e.getUTCDate()) + "T" + t(e.getUTCHours()) + ":" + t(e.getUTCMinutes()) + ":" + t(e.getUTCSeconds()) + "." + ((e.getUTCMilliseconds() / 1e3).toFixed(3) + "").slice(2, 5) + "Z" }(), iKey: e, name: "Microsoft.ApplicationInsights." + e.replace(/-/g, "") + "." + t, sampleRate: 100, tags: n, data: { baseData: { ver: 2 } } } } var h = d.url || y.src; if (h) { function a(e) { var t, n, a, i, r, o, s, c, u, p, l; g = !0, m.queue = [], f || (f = !0, t = h, s = function () { var e = {}, t = d.connectionString; if (t) for (var n = t.split(";"), a = 0; a < n.length; a++) { var i = n[a].split("="); 2 === i.length && (e[i[0][b]()] = i[1]) } if (!e[C]) { var r = e.endpointsuffix, o = r ? e.location : null; e[C] = "https://" + (o ? o + "." : "") + "dc." + (r || "services.visualstudio.com") } return e }(), c = s[D] || d[D] || "", u = s[C], p = u ? u + "/v2/track" : d.endpointUrl, (l = []).push((n = "SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details)", a = t, i = p, (o = (r = v(c, "Exception")).data).baseType = "ExceptionData", o.baseData.exceptions = [{ typeName: "SDKLoadFailed", message: n.replace(/\./g, "-"), hasFullStack: !1, stack: n + "\nSnippet failed to load [" + a + "] -- Telemetry is disabled\nHelp Link: https://go.microsoft.com/fwlink/?linkid=2128109\nHost: " + (S && S.pathname || "_unknown_") + "\nEndpoint: " + i, parsedStack: [] }], r)), l.push(function (e, t, n, a) { var i = v(c, "Message"), r = i.data; r.baseType = "MessageData"; var o = r.baseData; return o.message = 'AI (Internal): 99 message:"' + ("SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details) (" + n + ")").replace(/\"/g, "") + '"', o.properties = { endpoint: a }, i }(0, 0, t, p)), function (e, t) { if (JSON) { var n = T.fetch; if (n && !y.useXhr) n(t, { method: N, body: JSON.stringify(e), mode: "cors" }); else if (XMLHttpRequest) { var a = new XMLHttpRequest; a.open(N, t), a.setRequestHeader("Content-type", "application/json"), a.send(JSON.stringify(e)) } } }(l, p)) } function i(e, t) { f || setTimeout(function () { !t && m.core || a() }, 500) } var e = function () { var n = l.createElement(k); n.src = h; var e = y[w]; return !e && "" !== e || "undefined" == n[w] || (n[w] = e), n.onload = i, n.onerror = a, n.onreadystatechange = function (e, t) { "loaded" !== n.readyState && "complete" !== n.readyState || i(0, t) }, n }(); y.ld < 0 ? l.getElementsByTagName("head")[0].appendChild(e) : setTimeout(function () { l.getElementsByTagName(k)[0].parentNode.appendChild(e) }, y.ld || 0) } try { m.cookie = l.cookie } catch (p) { } function t(e) { for (; e.length;)!function (t) { m[t] = function () { var e = arguments; g || m.queue.push(function () { m[t].apply(m, e) }) } }(e.pop()) } var n = "track", r = "TrackPage", o = "TrackEvent"; t([n + "Event", n + "PageView", n + "Exception", n + "Trace", n + "DependencyData", n + "Metric", n + "PageViewPerformance", "start" + r, "stop" + r, "start" + o, "stop" + o, "addTelemetryInitializer", "setAuthenticatedUserContext", "clearAuthenticatedUserContext", "flush"]), m.SeverityLevel = { Verbose: 0, Information: 1, Warning: 2, Error: 3, Critical: 4 }; var s = (d.extensionConfig || {}).ApplicationInsightsAnalytics || {}; if (!0 !== d[I] && !0 !== s[I]) { var c = "onerror"; t(["_" + c]); var u = T[c]; T[c] = function (e, t, n, a, i) { var r = u && u(e, t, n, a, i); return !0 !== r && m["_" + c]({ message: e, url: t, lineNumber: n, columnNumber: a, error: i }), r }, d.autoExceptionInstrumented = !0 } return m }(y.cfg); function a() { y.onInit && y.onInit(n) } (T[t] = n).queue && 0 === n.queue.length ? (n.queue.push(a), n.trackPageView({})) : a() }(window, document, {
+            src: "https://js.monitor.azure.com/scripts/b/ai.2.min.js",
+            crossOrigin: "anonymous",
+            cfg: {
+                connectionString: "InstrumentationKey=__INSTRUMENTATION_KEY__;"
+            }
         });
-        window.appInsights = appInsights;
-        appInsights.trackPageView();
     </script>
     <script>
         (function (i, s, o, g, r, a, m) {
@@ -31,22 +32,34 @@
         ga('create', '__GAKEY__', 'auto');
         ga('send', 'pageview');
     </script>
+    <style type="text/css">
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #167bdd;
+            color: white;
+            text-align: center;
+            padding: 4px;
+        }
+    </style>
     <title>Create Project</title>
 
 </head>
 <body class="pb-3">
     <input type="hidden" id="hidnUID" />
-    @if (!string.IsNullOrEmpty(Model.accessToken))
+    @if (!string.IsNullOrEmpty(Model.AccessToken))
     {
-        <input type="hidden" value="@Model.accessToken" id="hiddenAccessToken" />
+        <input type="hidden" value="@Model.AccessToken" id="hiddenAccessToken" />
     }
-    @if (!string.IsNullOrEmpty(Model.selectedTemplateDescription))
+    @if (!string.IsNullOrEmpty(Model.SelectedTemplateDescription))
     {
-        <input type="hidden" value="@Model.selectedTemplateDescription" id="selectedTemplateDescription" />
+        <input type="hidden" value="@Model.SelectedTemplateDescription" id="selectedTemplateDescription" />
     }
-    @if (!string.IsNullOrEmpty(Model.selectedTemplateFolder))
+    @if (!string.IsNullOrEmpty(Model.SelectedTemplateFolder))
     {
-        <input type="hidden" value="@Model.selectedTemplateFolder" id="selectedTemplateFolder" />
+        <input type="hidden" value="@Model.SelectedTemplateFolder" id="selectedTemplateFolder" />
     }
     @if (!string.IsNullOrEmpty(Model.Message))
     {
@@ -55,9 +68,13 @@
     @if (!string.IsNullOrEmpty(Model.SelectedTemplate))
     {
         <input type="hidden" value="@Model.SelectedTemplate" id="selectedTemplate" />
-    }@if (!string.IsNullOrEmpty(Model.templateImage))
+    }@if (!string.IsNullOrEmpty(Model.TemplateImage))
     {
-        <input type="hidden" value="@Model.templateImage" id="selectedTemplateImage" />
+        <input type="hidden" value="@Model.TemplateImage" id="selectedTemplateImage" />
+    }
+    @if (!string.IsNullOrEmpty(Model.Document))
+    {
+        <input type="hidden" value="@Model.Document" id="refDocument" />
     }
     <input type="hidden" value="@Model.ForkGitHubRepo" id="forkGitRepo" />
     <input type="hidden" id="hdnMessage" />
@@ -113,17 +130,17 @@
         <a class="navbar-brand p-0 mr-auto" href="../Account/Verify">
             <img src="~/content/assets/images/VS_logo.png" alt="">
             <span class="navbar-brand-text ml-1">
-                Azure DevOps Onboarding Automation Framework Simulator
+                Azure DevOps Demo Generator
             </span>
         </a>
         <ul class="navbar-nav">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                    aria-expanded="false">
-                    <img src="~/content/assets/images/VSTS-user-image.svg" alt="Azure DevOps Onboarding Automation Framework Simulator">
-                    @if (Session["User"] != null)
+                    <img src="~/content/assets/images/VSTS-user-image.svg" alt="Azure DevOps Demo Generator">
+                    @if (ViewData["User"] != null)
                     {
-                        <span class="VSTS-username ml-1" style="font-size:16px">@Session["User"].ToString()</span>
+                        <span class="VSTS-username ml-1" style="font-size:16px">@ViewData["User"].ToString()</span>
                     }
                     <span class="sr-only">(current)</span>
                 </a>
@@ -138,9 +155,15 @@
         <div class="text-center text-white display-4 p-3" id="greeting" style="line-height: 1.2;">
             Create New Project
         </div>
-        <div class="text-center display-4 p-3" id="greeting" style="line-height: 1.2;">
-            <a href="../extractor/index" target="_blank" class="text-white" style="font-size: 18px; float: right;" id="buildYourTemplate">Build your template</a>
-        </div>
+        @{
+            if (!string.IsNullOrEmpty(Model.EnableExtractor) && Model.EnableExtractor.ToLower() == "true")
+            {
+                <div class="text-center display-4 p-3" id="greeting" style="line-height: 1.2;">
+                    <a href="../extractor/index" target="_blank" class="text-white" style="font-size: 18px; float: right;" id="buildYourTemplate">Build your template *</a>
+                </div>
+            }
+        }
+
     </div>
     @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
     {
@@ -159,7 +182,18 @@
                 <div class="d-flex flex-column VSTS-mh-100">
                     <img class="img-fluid mob_d" src="~/content/assets/images/VSTS-demoGen-image.png" alt="" style="max-width: 88%; opacity:0.3">
                     <div class="demo-generator-feedback VSTS-create-page-feedback mt-3 text-center text-sm-left">
-                        
+                        <h6>Feedback&colon;</h6>
+                        <p class="mb-0">
+                            To provide feedback, you can raise an issue
+                            <a class="text-primary" href="https://github.com/microsoft/AzureDevOpsDemoGenerator/issues/new" target="_blank">here </a>.
+                        <p>Like our tool? We would appreciate if you share feedback on social</p>
+
+                        <p>
+                            <script>function fbs_click() { u = "https://azuredevopsdemogenerator.azurewebsites.net/"; t = +Azure + DevOps + Demo + Generator & window.open('http://www.facebook.com/sharer.php?u=' + encodeURIComponent(u) + '&t=' + encodeURIComponent(t), 'sharer', 'toolbar=0,status=0,width=626,height=436'); return false; }</script>
+                            <a href="http://www.facebook.com/sharer.php?u=https://azuredevopsdemogenerator.azurewebsites.net/&t=Azure+Devops+Demo+Generator" target="_blank"><img src="~/Images/facebook.png" style="width:20px;" /></a>&nbsp;&nbsp;
+                            <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://azuredevopsdemogenerator.azurewebsites.net/&t=Azure+Devops+Demo+Generator" target="_blank"><img src="~/Images/linkedin.png" style="width:20px;" /></a>&nbsp;&nbsp;
+                            <a href="https://twitter.com/intent/tweet?url=https://azuredevopsdemogenerator.azurewebsites.net/&amp;text=Azure+DevOps+Demo+Generator&amp;hashtags=azuredevopsdemogenerator" target="_blank"><img src="~/Images/twitter.png" style="width:20px;" /></a>&nbsp;&nbsp;
+                        </p>
                     </div>
                 </div>
             </div>
@@ -181,7 +215,7 @@
                         <label for="ddlAcccountName" class="col-lg-3 col-form-label" style="font-weight: 400;">Select Organization :</label>
                         <div class="col-lg-8">
 
-                            @Html.DropDownListFor(model => model.accountName, new SelectList(Model.accountsForDropdown), "Select Organization", new { @class = "form-control rmverror", id = "ddlAcccountName", name = "accountName", style = "cursor:pointer" })
+                            @Html.DropDownListFor(model => model.AccountName, new SelectList(Model.AccountsForDropdown), "Select Organization", new { @class = "form-control rmverror", id = "ddlAcccountName", name = "accountName", style = "cursor:pointer" })
                             <div class="alert alert-danger d-none" role="alert" id="ddlAcccountName_Error">
                             </div>
                             <div style="color:red">
@@ -196,15 +230,13 @@
                             <input type="hidden" id="PrivateTemplateName" />
                             <input type="hidden" id="PrivateTemplatePath" />
                             <div class="alert alert-danger d-none" role="alert" id="ddlTemplates_Error">
+
                             </div>
                         </div>
                         <div class="template-invoke mb-3 mt-1 col-lg-3">
-                            @if (Session["PrivateTemplateOriginalName"] == null)
-                            {
-                                <button type="button" class="btn btn-primary" id="templateselection" style="padding-left:5px; padding-right:5px; width: 100%">
-                                    Choose template
-                                </button>
-                            }
+                            <button type="button" class="btn btn-primary" id="templateselection" style="padding-left:5px; padding-right:5px; width: 100%">
+                                Choose template
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -214,10 +246,9 @@
                         <div class="col-lg-12">
                             <div class="git_support">
                                 <div for="Template" class="col-lg-12 col-sm-12 p-0">
-                                    <p class="githubPng"><b>Azure DevOps Onboarding Automation Framework Simulator now supports GitHub forking!</b></p>
+                                    <p class="githubPng"><b>Azure DevOps Demo Generator now supports GitHub importing!</b></p>
                                     <p class="m-2">
-                                        The selected template includes a GitHub repository. You can choose to fork it or use the existing
-                                        repo.
+                                        The selected template includes a GitHub repository. You can choose to import it. If you import, all pipelines will be updated to point to the imported repo.
                                     </p>
                                 </div>
                             </div>
@@ -225,8 +256,9 @@
                             <div class="col-lg-5  mb-3 mt-3 float-left" style="">
                                 <div class="template-invoke mb-3 mt-1 inlinestyle">
                                     <input type="checkbox" id="gitHubCheckbox" name="gitHubCheckbox">
-                                    <label for="gitHubCheckbox">Yes, I want to fork this repository</label>
+                                    <label for="gitHubCheckbox">Yes, I want to import this repository</label>
                                 </div>
+                                @*<p class="inlinestyle mt-1">Yes, I want to import this repository</p>*@
                             </div>
                             <div class="template-invoke mb-3 mt-3 col-lg-3 float-left" id="gitHubAuthDiv">
                                 <button type="button" class="btn githubIcon" id="githubAuth" style="padding-left:5px; padding-right:5px; width: 100%" disabled="">
@@ -236,7 +268,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="projectParameters" style="display:none">
                 </div>
                 <!-- PROJECT PARAMETERS -->
@@ -245,7 +276,7 @@
 
                 </div>
                 <div class="mt-4 mb-3 border p-3 d-none col-lg-12" id="lblextensionError" style="border-radius: 4px; box-shadow: 0px 5px 20px #f2f2f2;">
-                    
+                    <div style="margin-bottom: 6px;" class="boldText"><strong>Verifying if all required extension(s) are installed and enabled</strong></div>
                     <div class="extensionError boldText">
                         <p style="display:none;" id="extensionError"></p>
                     </div>
@@ -297,7 +328,7 @@
                 <div class="card text-white mb-3 vstsScroll" id="announcement" style="max-height:250px;overflow-y:auto;">
                     <div class="card-header bg-primary">What's new</div>
                     <div class="card-body" style="background-color:white; color:black">
-                        <p>- New templates in Microsoft Learning platform</p>
+                        <p>You're using new implementation in .Net Core platform. If you are facing any issue, report the <a href="https://github.com/microsoft/AzureDevOpsDemoGenerator/issues/new?labels=core" target="_blank"> issue </a> and <a href="https://azuredevopsdemogenerator.azurewebsites.net/?x-ms-routing-name=self" target="_blank">Go back to production app</a></p>
                     </div>
                 </div>
                 <div class="card bg-primary mb-3 mt-auto" id="errorNotify" style="display:none;">
@@ -316,6 +347,10 @@
             </div>
         </div>
     </div>
+    <!--Reusable footer for announcement-->
+    <!-- <div class="footer">
+         We are moving to .Net Core 3.0, you are using preview version, log your issues <a class="text-white" href="https://github.com/microsoft/AzureDevOpsDemoGenerator/issues/new" target="_blank">here. We'll be return to main site after couple of hours</a>.
+     </div>-->
     <script src="~/Scripts/jquery-1.12.4.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
