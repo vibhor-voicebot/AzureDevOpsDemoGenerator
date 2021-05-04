@@ -1,3 +1,6 @@
+using NLog;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -19,7 +22,7 @@ namespace AzureDevOpsAPI
         protected readonly string Scheme;
         protected readonly string GitCredential;
         protected readonly string UserName;
-
+        Logger logger = LogManager.GetLogger("*");
 
         public ApiServiceBase(IAppConfiguration configuration)
         {
@@ -39,7 +42,7 @@ namespace AzureDevOpsAPI
 
         protected HttpClient GetHttpClient()
         {
-            Debug.WriteLine("Configuration.UriString ++++++++++++++################################" + Configuration.UriString);
+            logger.Info("Configuration.UriString ++++++++++++++################################" + Configuration.UriString);
             //logger.Info("Configuration.UriString ++++++++++++++################################" + Configuration.UriString);
             //logger.Info("Configuration ++++++++++++++################################" + Configuration);
             var client = new HttpClient
