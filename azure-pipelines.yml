@@ -1,0 +1,72 @@
+trigger:
+- dotnetcore3.0
+pool:
+  vmImage: ubuntu-latest
+variables:
+  buildConfiguration: Release
+steps:
+- task: DotNetCoreCLI@2
+  displayName: dotnet restore
+  inputs:
+    command: restore
+    feedsToUse: select
+    vstsFeed: my-vsts-feed
+
+- task: DotNetCoreCLI@2
+  displayName: dotnet build
+  inputs:
+    command: build
+    projects: '**/*.csproj'
+    arguments: --configuration $(buildConfiguration)
+- task: DotNetCoreCLI@2
+  displayName: dotnet unit test tasktype
+  inputs:
+    command: test
+    projects: '**/*Tests/*.csproj'
+    arguments: --configuration $(buildConfiguration)
+
+#New task added here
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results **/TEST-*.xml'
+  inputs:
+    testResultsFormat: NUnit
+    failTaskOnFailedTests: true
+    
+- task: DotNetCoreCLI@2
+  displayName: dotnet collect code coverage
+  inputs:
+    command: test
+    projects: '**/*Tests/*.csproj'
+    arguments: --configuration $(buildConfiguration) --collect "Code coverage"
+- task: PublishCodeCoverageResults@1
+  displayName: Publish code coverage report
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: $(Build.SourcesDirectory)/**/coverage.cobertura.xml
+
+  
+- task: DotNetCoreCLI@2
+  displayName: zipAfterPublish
+  inputs:
+    command: publish
+    publishWebProjects: true
+    arguments: --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)
+    zipAfterPublish: true
+- task: PublishBuildArtifacts@1
+  displayName: PublishBuildArtifacts
+  inputs:
+    pathtoPublish: $(Build.ArtifactStagingDirectory)
+    artifactName: drop
+- task: DotNetCoreCLI@2
+  displayName: zipAfterPublish
+  inputs:
+    command: publish
+    publishWebProjects: true
+    arguments: --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)
+    zipAfterPublish: true
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: '203088f1-0003-4f4e-811f-38a5d10d5077'
+    appName: 'azuredevopsonboardingdemosimulator'
+    package: $(System.DefaultWorkingDirectory)/**/*.zip
