@@ -67,6 +67,6 @@ steps:
 
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: '203088f1-0003-4f4e-811f-38a5d10d5077'
-    appName: 'azuredevopsonboardingdemosimulator'
+    azureSubscription: 'demogenautomated'
+    appName: 'azuredevopsonboardingdemosimulator-gpact'
     package: $(System.DefaultWorkingDirectory)/**/*.zip
