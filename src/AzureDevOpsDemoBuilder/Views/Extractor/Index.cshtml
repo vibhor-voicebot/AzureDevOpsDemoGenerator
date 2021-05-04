@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Http
 @model AzureDevOpsDemoBuilder.Models.ProjectList.ProjectDetails
 @{
-    ViewBag.Title = "Azure DevOps Demo Generator - Template Builder";
+    ViewBag.Title = "Azure DevOps Onboarding Framework Simulator - Template Builder";
 }
 
 <!DOCTYPE html>
@@ -33,7 +33,7 @@
         ga('create', '__GAKEY__', 'auto');
         ga('send', 'pageview');
     </script>
-    <title>Template Builder</title>
+    <title>gPact's Template Builder</title>
     <style type="text/css">
         .footer {
             position: fixed;
@@ -137,14 +137,14 @@
         <a class="navbar-brand p-0 mr-auto" href="#">
             <img src="~/content/assets/images/VS_logo.png" alt="">
             <span class="navbar-brand-text ml-1">
-                Azure DevOps Demo Generator - Template Builder
+                Azure DevOps Onboarding Framework Simulator - Template Builder
             </span>
         </a>
         <ul class="navbar-nav">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                    aria-expanded="false">
-                    <img src="~/content/assets/images/VSTS-user-image.svg" alt="AzureDevOpsDemogenerator">
+                    <img src="~/content/assets/images/VSTS-user-image.svg" alt="AzureDevOpsOnboardingFrameworkSimulator">
                     @if (ViewData["User"] != null)
                     {
                         <span class="VSTS-username ml-1" style="font-size:16px">@ViewData["User"]</span>
@@ -283,7 +283,7 @@
                                 <form action="~/Extractor/ZipAndDownloadFiles" method="post">
                                     <input type="hidden" name="fileName" id="hdnProjecName">
                                     Click <button type="submit" class="btn btn-link" id="fileDownload" style="padding:0px; vertical-align: baseline;">here</button>to download your file
-                                    <p style="font-weight:600">Note: Folder will be deleted from the server once you click on download button.</p>
+                                    
                                 </form>
                             </div>
                         </div>

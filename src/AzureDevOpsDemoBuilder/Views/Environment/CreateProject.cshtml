@@ -2,7 +2,7 @@
 @model AzureDevOpsDemoBuilder.Models.Project
 
 @{
-    ViewBag.Title = "Azure DevOps Demo Generator";
+    ViewBag.Title = "Azure DevOps Onboarding Framework Simulator";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -131,7 +131,7 @@
         <a class="navbar-brand p-0 mr-auto" href="../Account/Verify">
             <img src="~/content/assets/images/VS_logo.png" alt="">
             <span class="navbar-brand-text ml-1">
-                Azure DevOps Demo Generator
+                Azure DevOps Onboarding Framework Simulator
             </span>
         </a>
         <ul class="navbar-nav">
@@ -182,20 +182,7 @@
             <div class="col-md-3 order-3 order-md-1 VSTS-mh-100">
                 <div class="d-flex flex-column VSTS-mh-100">
                     <img class="img-fluid mob_d" src="~/content/assets/images/VSTS-demoGen-image.png" alt="" style="max-width: 88%; opacity:0.3">
-                    <div class="demo-generator-feedback VSTS-create-page-feedback mt-3 text-center text-sm-left">
-                        <h6>Feedback&colon;</h6>
-                        <p class="mb-0">
-                            To provide feedback, you can raise an issue
-                            <a class="text-primary" href="https://github.com/microsoft/AzureDevOpsDemoGenerator/issues/new" target="_blank">here </a>.
-                        <p>Like our tool? We would appreciate if you share feedback on social</p>
-
-                        <p>
-                            <script>function fbs_click() { u = "https://azuredevopsdemogenerator.azurewebsites.net/"; t = +Azure + DevOps + Demo + Generator & window.open('http://www.facebook.com/sharer.php?u=' + encodeURIComponent(u) + '&t=' + encodeURIComponent(t), 'sharer', 'toolbar=0,status=0,width=626,height=436'); return false; }</script>
-                            <a href="http://www.facebook.com/sharer.php?u=https://azuredevopsdemogenerator.azurewebsites.net/&t=Azure+Devops+Demo+Generator" target="_blank"><img src="~/Images/facebook.png" style="width:20px;" /></a>&nbsp;&nbsp;
-                            <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://azuredevopsdemogenerator.azurewebsites.net/&t=Azure+Devops+Demo+Generator" target="_blank"><img src="~/Images/linkedin.png" style="width:20px;" /></a>&nbsp;&nbsp;
-                            <a href="https://twitter.com/intent/tweet?url=https://azuredevopsdemogenerator.azurewebsites.net/&amp;text=Azure+DevOps+Demo+Generator&amp;hashtags=azuredevopsdemogenerator" target="_blank"><img src="~/Images/twitter.png" style="width:20px;" /></a>&nbsp;&nbsp;
-                        </p>
-                    </div>
+                    
                 </div>
             </div>
             <!--
@@ -242,33 +229,7 @@
                     </div>
                 </div>
 
-                <div style="border:1px solid #ccc; margin-top:15px;" id="gitHubCheckboxDiv">
-                    <div class="form-group row">
-                        <div class="col-lg-12">
-                            <div class="git_support">
-                                <div for="Template" class="col-lg-12 col-sm-12 p-0">
-                                    <p class="githubPng"><b>Azure DevOps Demo Generator now supports GitHub importing!</b></p>
-                                    <p class="m-2">
-                                        The selected template includes a GitHub repository. You can choose to import it. If you import, all pipelines will be updated to point to the imported repo.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 float-left"></div>
-                            <div class="col-lg-5  mb-3 mt-3 float-left" style="">
-                                <div class="template-invoke mb-3 mt-1 inlinestyle">
-                                    <input type="checkbox" id="gitHubCheckbox" name="gitHubCheckbox">
-                                    <label for="gitHubCheckbox">Yes, I want to import this repository</label>
-                                </div>
-                                @*<p class="inlinestyle mt-1">Yes, I want to import this repository</p>*@
-                            </div>
-                            <div class="template-invoke mb-3 mt-3 col-lg-3 float-left" id="gitHubAuthDiv">
-                                <button type="button" class="btn githubIcon" id="githubAuth" style="padding-left:5px; padding-right:5px; width: 100%" disabled="">
-                                    Authorize
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
                 <div id="projectParameters" style="display:none">
                 </div>
                 <!-- PROJECT PARAMETERS -->
@@ -276,12 +237,7 @@
                 <div id="InfoMessage" style="border-radius: 4px;box-shadow: 0px 5px 20px #f2f2f2;" class="border col-lg-12 d-block mt-4 p-3">
 
                 </div>
-                <div class="mt-4 mb-3 border p-3 d-none col-lg-12" id="lblextensionError" style="border-radius: 4px; box-shadow: 0px 5px 20px #f2f2f2;">
-                    <div style="margin-bottom: 6px;" class="boldText"><strong>Verifying if all required extension(s) are installed and enabled</strong></div>
-                    <div class="extensionError boldText">
-                        <p style="display:none;" id="extensionError"></p>
-                    </div>
-                </div>
+                
                 <!--/EXTENSIONS -->
                 <div class="col-lg-12">
                     <div class="form-group row" id="">
@@ -315,23 +271,7 @@
             -->
             <div class="col-md-3 order-2 order-md-3">
                 <!-- Description card -->
-                <div class="card text-white mb-3 vstsScroll" id="lblDescription" style="max-height:250px;overflow-y:auto;">
-                    <div class="card-header bg-primary ">About this Template</div>
-                    <div class="card-body" style="background-color:white; color:black">
-                        <div class="template-header" style="width:100%; float:left;">
-                            <img class="templateImage" style="display: inline-block; float: left;" id="templatePreviewImage" src="">
-                            <strong style="margin-left: 7px;text-align: left;float: right;display: inline-block;width: 83%;" id="templatePreviewName"></strong>
-                        </div>
-                        <p class="card-text" id="descContainer">
-                        </p>
-                    </div>
-                </div>
-                <div class="card text-white mb-3 vstsScroll" id="announcement" style="max-height:250px;overflow-y:auto;">
-                    <div class="card-header bg-primary">What's new</div>
-                    <div class="card-body" style="background-color:white; color:black">
-                        <p>You're using new implementation in .Net Core platform. If you are facing any issue, report the <a href="https://github.com/microsoft/AzureDevOpsDemoGenerator/issues/new?labels=core" target="_blank"> issue </a> and <a href="https://azuredevopsdemogenerator.azurewebsites.net/?x-ms-routing-name=self" target="_blank">Go back to production app</a></p>
-                    </div>
-                </div>
+               
                 <div class="card bg-primary mb-3 mt-auto" id="errorNotify" style="display:none;">
                     <div class="card-header" style="color:white">Sorry….We ran into an issue!</div>
                     <div class="card-body" style="background-color:white">
