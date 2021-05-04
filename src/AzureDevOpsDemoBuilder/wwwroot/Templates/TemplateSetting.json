@@ -1,14 +1,14 @@
 {
   "Groups": [
-    "DevOps Built-in",
-    "Private/Custom"
+    "DevOps",
+    "Private"
   ],
   "PrivateGroups": [
     "PrivateTemplates"
   ],
   "GroupwiseTemplates": [
     {
-        "Groups": "DevOps Built-in",
+        "Groups": "DevOps",
         "Template": [
             {
                 "Key": "77386",
@@ -34,7 +34,7 @@
         ]
     },
     {
-        "Groups": "Private/Custom",
+        "Groups": "Private",
         "Template": [
             {
                 "Name": "Private",
