@@ -103,7 +103,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 {
                     using (var client = GetHttpClient())
                     {
-                        var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
+                        var jsonContent = new StringContent(json, Encoding.UTF8, "application/json;api-version=5.0");
                         var method = new HttpMethod("POST");
 
                         var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/_apis/projects?api-version=" + Configuration.VersionNumber) { Content = jsonContent };

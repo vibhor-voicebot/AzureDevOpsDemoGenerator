@@ -30,7 +30,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     {
                         // serialize the fields array into a json string  
                         //var patchValue = new StringContent(JsonConvert.SerializeObject(team), Encoding.UTF8, "application/json");
-                        var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
+                        var jsonContent = new StringContent(json, Encoding.UTF8, "application/json;api-version=5.0");
                         var method = new HttpMethod("POST");
 
                         var request = new HttpRequestMessage(method, client.BaseAddress + "/_apis/projects/" + project + "/teams?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
@@ -135,7 +135,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     {
                         // serialize the fields array into a json string  
                         //var patchValue = new StringContent(JsonConvert.SerializeObject(team), Encoding.UTF8, "application/json");
-                        var jsonContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(node), Encoding.UTF8, "application/json");
+                        var jsonContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(node), Encoding.UTF8, "application/json;api-version=5.0");
                         var method = new HttpMethod("POST");
 
                         var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/_apis/wit/classificationNodes/areas?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
@@ -291,7 +291,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     object objJson = new { Backlogiteration = iterationId };
                     using (var client = GetHttpClient())
                     {
-                        var postValue = new StringContent(JsonConvert.SerializeObject(objJson), Encoding.UTF8, "application/json");
+                        var postValue = new StringContent(JsonConvert.SerializeObject(objJson), Encoding.UTF8, "application/json;api-version=5.0");
                         var method = new HttpMethod("PATCH");
                         var request = new HttpRequestMessage(method, client.BaseAddress + "/" + projectName + "/" + teamName + "/_apis/work/teamsettings?api-version=" + Configuration.VersionNumber) { Content = postValue };
                         var response = client.SendAsync(request).Result;
@@ -390,7 +390,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
 
                     using (var client = GetHttpClient())
                     {
-                        var jsonContent = new StringContent(JsonConvert.SerializeObject(objJson), Encoding.UTF8, "application/json");
+                        var jsonContent = new StringContent(JsonConvert.SerializeObject(objJson), Encoding.UTF8, "application/json;api-version=5.0");
                         var method = new HttpMethod("POST");
 
                         var request = new HttpRequestMessage(method, client.BaseAddress + "/" + projectName + "/" + teamName + "/_apis/work/teamsettings/iterations?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
