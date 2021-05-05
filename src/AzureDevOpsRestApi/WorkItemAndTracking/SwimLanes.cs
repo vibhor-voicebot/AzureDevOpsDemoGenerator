@@ -28,7 +28,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         var patchValue = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("PUT");
 
-                        var request = new HttpRequestMessage(method, projectName + "/" + teamName + "/_apis/work/boards/" + boardType + "/rows?api-version=" + Configuration.VersionNumber) { Content = patchValue };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + projectName + "/" + teamName + "/_apis/work/boards/" + boardType + "/rows?api-version=" + Configuration.VersionNumber) { Content = patchValue };
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {

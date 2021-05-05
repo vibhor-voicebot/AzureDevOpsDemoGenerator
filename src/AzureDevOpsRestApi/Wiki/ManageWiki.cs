@@ -31,7 +31,7 @@ namespace AzureDevOpsAPI.Wiki
                         var jsonContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
                         var method = new HttpMethod("POST");
-                        var request = new HttpRequestMessage(method, Configuration.UriString + "/_apis/wiki/wikis?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/_apis/wiki/wikis?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         HttpResponseMessage response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -86,7 +86,7 @@ namespace AzureDevOpsAPI.Wiki
                         var jsonContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
                         var method = new HttpMethod("PUT");
-                        var request = new HttpRequestMessage(method, projectName + "/_apis/wiki/wikis/" + wikiId + "/pages?path=" + path + "&api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString  + projectName + "/_apis/wiki/wikis/" + wikiId + "/pages?path=" + path + "&api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         HttpResponseMessage response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -131,7 +131,7 @@ namespace AzureDevOpsAPI.Wiki
                         var jsonContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
                         var method = new HttpMethod("POST");
-                        var request = new HttpRequestMessage(method, projectName + "/_apis/wiki/wikis/" + wikiId + "/pagemoves?&api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + projectName + "/_apis/wiki/wikis/" + wikiId + "/pagemoves?&api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         HttpResponseMessage response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -174,7 +174,7 @@ namespace AzureDevOpsAPI.Wiki
                     using (var client = GetHttpClient())
                     {
                         var method = new HttpMethod("DELETE");
-                        var request = new HttpRequestMessage(method, projectName + "/_apis/wiki/wikis/" + wikiId + "/pages?path=" + path + "&api-version=" + Configuration.VersionNumber);
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + projectName + "/_apis/wiki/wikis/" + wikiId + "/pages?path=" + path + "&api-version=" + Configuration.VersionNumber);
                         HttpResponseMessage response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
@@ -219,7 +219,7 @@ namespace AzureDevOpsAPI.Wiki
                     {
                         var json = new StringContent(jsonString, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
-                        var request = new HttpRequestMessage(method, string.Format("{0}/{1}/_apis/wiki/wikis?api-version={2}", Configuration.UriString, Project, Configuration.VersionNumber)) { Content = json };
+                        var request = new HttpRequestMessage(method, string.Format("https://dev.azure.com/" + "{0}/{1}/_apis/wiki/wikis?api-version={2}", Configuration.UriString, Project, Configuration.VersionNumber)) { Content = json };
                         HttpResponseMessage response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.Created)
                         {

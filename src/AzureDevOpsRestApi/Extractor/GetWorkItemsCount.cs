@@ -54,7 +54,7 @@ namespace AzureDevOpsAPI.Extractor
                         var method = new HttpMethod("POST");
 
                         // send the request               
-                        var request = new HttpRequestMessage(method, Configuration.UriString + "/_apis/wit/wiql?api-version=" + Configuration.VersionNumber) { Content = postValue };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/_apis/wit/wiql?api-version=" + Configuration.VersionNumber) { Content = postValue };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -114,7 +114,7 @@ namespace AzureDevOpsAPI.Extractor
                     {
                         using (var client = GetHttpClient())
                         {
-                            HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/_apis/wit/workitems?api-version=" + Configuration.VersionNumber + "&ids=" + workitemstoFetch + "&$expand=relations").Result;
+                            HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/wit/workitems?api-version=" + Configuration.VersionNumber + "&ids=" + workitemstoFetch + "&$expand=relations").Result;
                             if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
                                 viewModel = response.Content.ReadAsAsync<WorkItemFetchResponse.WorkItems>().Result;
@@ -160,7 +160,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/{1}/_apis/wit/workitemtypes?api-version={2}", Configuration.UriString, Configuration.Project, Configuration.VersionNumber)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/_apis/wit/workitemtypes?api-version={2}", Configuration.UriString, Configuration.Project, Configuration.VersionNumber)).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             WorkItemNames.Names workItemNames = JsonConvert.DeserializeObject<WorkItemNames.Names>(response.Content.ReadAsStringAsync().Result);

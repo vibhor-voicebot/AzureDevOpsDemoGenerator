@@ -24,7 +24,7 @@ namespace AzureDevOpsAPI.ExtensionManagement
                 {
                     using (var client = GetHttpClient())
                     {
-                        var request = Configuration.UriString + "/_apis/extensionmanagement/installedextensions?api-version" + Configuration.VersionNumber;
+                        var request = "https://extmgmt.dev.azure.com/" + Configuration.UriString + "/_apis/extensionmanagement/installedextensions?api-version" + Configuration.VersionNumber;
                         HttpResponseMessage response = client.GetAsync(request).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                         {

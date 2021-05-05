@@ -23,7 +23,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + Configuration.Project + "/_apis/work/teamsettings/iterations?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + Configuration.Project + "/_apis/work/teamsettings/iterations?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
@@ -67,7 +67,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/_apis/projects/" + Project + "/teams?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/projects/" + Project + "/teams?api-version=" + Configuration.VersionNumber).Result;
                         if (!response.IsSuccessStatusCode || response.StatusCode != HttpStatusCode.OK)
                         {
                             var errorMessage = response.Content.ReadAsStringAsync();
@@ -124,7 +124,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        response = client.GetAsync(string.Format("{0}/{1}/{2}/_apis/work/boards/{3}/columns?api-version={4}", Configuration.UriString, Configuration.Project, Configuration.Team, boardType, Configuration.VersionNumber)).Result;
+                        response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/{2}/_apis/work/boards/{3}/columns?api-version={4}", Configuration.UriString, Configuration.Project, Configuration.Team, boardType, Configuration.VersionNumber)).Result;
                         return response;
                     }
                 }
@@ -156,7 +156,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/{1}/{2}/_apis/work/boards/{3}/rows?api-version={4}", Configuration.UriString, Project, Team, boardType, Configuration.VersionNumber)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/{2}/_apis/work/boards/{3}/rows?api-version={4}", Configuration.UriString, Project, Team, boardType, Configuration.VersionNumber)).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.OK)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
@@ -202,7 +202,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/{1}/{2}/_apis/work/teamsettings?api-version={3}", Configuration.UriString, Project, Team, Configuration.VersionNumber)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/{2}/_apis/work/teamsettings?api-version={3}", Configuration.UriString, Project, Team, Configuration.VersionNumber)).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.OK)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
@@ -247,7 +247,7 @@ namespace AzureDevOpsAPI.Extractor
                     using (var client = GetHttpClient())
                     {
 
-                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/{1}/{2}/_apis/work/boards/{3}/cardsettings?api-version={4}", Configuration.UriString, Project, Team, boardType, Configuration.VersionNumber)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/{2}/_apis/work/boards/{3}/cardsettings?api-version={4}", Configuration.UriString, Project, Team, boardType, Configuration.VersionNumber)).Result;
                         return response;
                     }
                 }
@@ -279,7 +279,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/{1}/{2}/_apis/work/boards/{3}/cardrulesettings?api-version={4}", Configuration.UriString, Project, Team, boardType, Configuration.VersionNumber)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/{2}/_apis/work/boards/{3}/cardrulesettings?api-version={4}", Configuration.UriString, Project, Team, boardType, Configuration.VersionNumber)).Result;
                         return response;
                     }
                 }
@@ -312,7 +312,7 @@ namespace AzureDevOpsAPI.Extractor
                     ExportIterations.Iterations viewModel = new ExportIterations.Iterations();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/{1}/_apis/work/teamsettings/iterations?api-version={2}", Configuration.UriString, Project, Configuration.VersionNumber)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/_apis/work/teamsettings/iterations?api-version={2}", Configuration.UriString, Project, Configuration.VersionNumber)).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.OK)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;

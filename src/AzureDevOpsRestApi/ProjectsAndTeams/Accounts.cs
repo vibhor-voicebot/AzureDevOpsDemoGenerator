@@ -27,7 +27,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     using (var client = GetHttpClient())
                     {
                         // connect to the REST endpoint            
-                        HttpResponseMessage response = client.GetAsync("/_apis/userentitlements?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/userentitlements?api-version=" + Configuration.VersionNumber).Result;
 
                         // check to see if we have a succesfull respond
                         if (response.IsSuccessStatusCode)

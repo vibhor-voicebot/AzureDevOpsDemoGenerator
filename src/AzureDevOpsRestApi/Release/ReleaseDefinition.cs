@@ -32,7 +32,7 @@ namespace AzureDevOpsAPI.Release
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, project + "/_apis/release/definitions?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "/_apis/release/definitions?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -75,7 +75,7 @@ namespace AzureDevOpsAPI.Release
                     var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                     var method = new HttpMethod("POST");
 
-                    var request = new HttpRequestMessage(method, project + "_apis/release/releases?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                    var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "_apis/release/releases?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                     var response = client.SendAsync(request).Result;
 
                     if (response.IsSuccessStatusCode)
@@ -104,7 +104,7 @@ namespace AzureDevOpsAPI.Release
                 string requestURL = string.Empty;
                 using (var client = GetHttpClient())
                 {
-                    requestURL = string.Format("{0}/_apis/release/definitions?api-version=" + Configuration.VersionNumber, project);
+                    requestURL = string.Format("https://dev.azure.com/" + Configuration.UriString + "{0}/_apis/release/definitions?api-version=" + Configuration.VersionNumber, project);
                     HttpResponseMessage response = client.GetAsync(requestURL).Result;
                     if (response.IsSuccessStatusCode)
                     {
@@ -113,7 +113,7 @@ namespace AzureDevOpsAPI.Release
                         int requiredDefinitionId = Definitions.Value.Where(x => x.Name == definitionName).FirstOrDefault().Id;
                         using (var client1 = GetHttpClient())
                         {
-                            requestURL = string.Format("{0}/_apis/release/definitions/{1}?api-version=" + Configuration.VersionNumber, project, requiredDefinitionId);
+                            requestURL = string.Format("https://dev.azure.com/" + Configuration.UriString + "{0}/_apis/release/definitions/{1}?api-version=" + Configuration.VersionNumber, project, requiredDefinitionId);
                             HttpResponseMessage ResponseDef = client1.GetAsync(requestURL).Result;
                             if (response.IsSuccessStatusCode)
                             {

@@ -31,7 +31,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                     GetNodesResponse.Nodes viewModel = new GetNodesResponse.Nodes();
                     using (HttpClient client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/_apis/wit/classificationNodes/iterations?$depth=5&api-version=" + Configuration.VersionNumber, projectName)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/" + Configuration.UriString + "{0}/_apis/wit/classificationNodes/iterations?$depth=5&api-version=" + Configuration.VersionNumber, projectName)).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             if (response.IsSuccessStatusCode)
@@ -90,7 +90,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         var jsonContent = new StringContent(JsonConvert.SerializeObject(node), Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, Configuration.UriString + "/" + projectName + "/_apis/wit/classificationNodes/iterations?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/_apis/wit/classificationNodes/iterations?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -148,7 +148,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         var jsonContent = new StringContent(JsonConvert.SerializeObject(node), Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, string.Format("/{0}/_apis/wit/classificationNodes/iterations/{1}?api-version=" + Configuration.VersionNumber, projectName, targetIteration)) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, string.Format("https://dev.azure.com/" + Configuration.UriString + "/{0}/_apis/wit/classificationNodes/iterations/{1}?api-version=" + Configuration.VersionNumber, projectName, targetIteration)) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -345,7 +345,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         var method = new HttpMethod("PATCH");
 
                         // send the request
-                        var request = new HttpRequestMessage(method, project + "/_apis/wit/classificationNodes/iterations/" + path + "?api-version=" + Configuration.VersionNumber) { Content = patchValue };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "/_apis/wit/classificationNodes/iterations/" + path + "?api-version=" + Configuration.VersionNumber) { Content = patchValue };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -415,7 +415,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                             var method = new HttpMethod("PATCH");
 
                             // send the request
-                            var request = new HttpRequestMessage(method, projectName + "/_apis/wit/classificationNodes/Iterations/" + key + "?api-version=" + Configuration.VersionNumber) { Content = patchValue };
+                            var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + projectName + "/_apis/wit/classificationNodes/Iterations/" + key + "?api-version=" + Configuration.VersionNumber) { Content = patchValue };
                             var response = client.SendAsync(request).Result;
 
                             if (response.IsSuccessStatusCode)
@@ -476,7 +476,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                     SprintResponse.Sprints sprints = new SprintResponse.Sprints();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(project + "/" + project + "%20Team/_apis/work/teamsettings/iterations?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + project + "/" + project + "%20Team/_apis/work/teamsettings/iterations?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;

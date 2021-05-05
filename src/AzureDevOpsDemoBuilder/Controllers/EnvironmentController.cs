@@ -693,7 +693,7 @@ namespace AzureDevOpsDemoBuilder.Controllers
                         var required = dict.Where(x => x.Value == false).ToList();
                         if (required.Count > 0)
                         {
-                            requiresExtensionNames = "<p style='color:red'>One or more extension(s) is not installed/enabled in your Azure DevOps Organization.</p><p> You will need to install and enable them in order to proceed. If you agree with the terms below, the required extensions will be installed automatically for the selected organization when the project is provisioned, otherwise install them manually and try refreshing the page </p>";
+                            requiresExtensionNames = "<p style='color:red'>One or more extension(s) is not installed/enabled in your Azure DevOps Organization.</p>";
                             var installedExtensions = dict.Where(x => x.Value == true).ToList();
                             if (installedExtensions.Count > 0)
                             {
@@ -736,7 +736,7 @@ namespace AzureDevOpsDemoBuilder.Controllers
                             }
                             if (!string.IsNullOrEmpty(requiredThirdPartyExt))
                             {
-                                requiredThirdPartyExt = requiredThirdPartyExt + "<br/><div id='ThirdPartyAgreeTerms'><label style = 'font-weight: 400; text-align: justify; padding-left: 5px;'><input type = 'checkbox' class='terms' id = 'ThirdPartyagreeTermsConditions' placeholder='thirdparty' /> &nbsp; The extension(s) are offered to you for your use by a third party, not Microsoft.  The extension(s) is licensed separately according to its corresponding License Terms.  By continuing and installing those extensions, you also agree to those License Terms.</label></div>";
+                                requiredThirdPartyExt = requiredThirdPartyExt + "<br/><div id='ThirdPartyAgreeTerms'><label style = 'font-weight: 400; text-align: justify; padding-left: 5px;'><input type = 'checkbox' class='terms' id = 'ThirdPartyagreeTermsConditions' placeholder='thirdparty' /> &nbsp; The extension(s) are offered to you by a third party, not Genpact. By continuing and installing those extensions, you also agree to those License Terms.</label></div>";
                             }
                             finalExtensionString = requiresExtensionNames + requiredMicrosoftExt + requiredThirdPartyExt;
                             return Json(new { message = finalExtensionString, status = "false" });

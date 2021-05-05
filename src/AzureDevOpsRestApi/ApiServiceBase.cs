@@ -42,12 +42,12 @@ namespace AzureDevOpsAPI
 
         protected HttpClient GetHttpClient()
         {
-            logger.Info("Configuration.UriString ++++++++++++++################################" + Configuration.UriString);
+            logger.Info("Configuration.UriString ++++++++++++++################################" + Configuration.UriString + "---> " + new Uri("https://dev.azure.com/" + Configuration.UriString));
             //logger.Info("Configuration.UriString ++++++++++++++################################" + Configuration.UriString);
             //logger.Info("Configuration ++++++++++++++################################" + Configuration);
             var client = new HttpClient
             {
-                BaseAddress = new Uri(Configuration.UriString)
+                BaseAddress = new Uri("https://dev.azure.com/"+Configuration.UriString)
             };
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

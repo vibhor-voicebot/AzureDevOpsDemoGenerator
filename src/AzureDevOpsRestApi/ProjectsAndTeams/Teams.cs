@@ -83,7 +83,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 {
                     using (HttpClient client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/_apis/projects/" + projectName + "/teams/" + teamaName + "/members/?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/projects/" + projectName + "/teams/" + teamaName + "/members/?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             TeamMemberResponse.TeamMembers viewModel = new TeamMemberResponse.TeamMembers();
@@ -138,7 +138,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                         var jsonContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(node), Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, client.BaseAddress + "/" + projectName + "/_apis/wit/classificationNodes/areas?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/_apis/wit/classificationNodes/areas?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -196,7 +196,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
 
                         var method = new HttpMethod("PATCH");
 
-                        var request = new HttpRequestMessage(method, client.BaseAddress + "/" + projectName + "/" + teamName + "/_apis/work/teamsettings/teamfieldvalues?api-version=" + Configuration.VersionNumber) { Content = patchValue };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/" + teamName + "/_apis/work/teamsettings/teamfieldvalues?api-version=" + Configuration.VersionNumber) { Content = patchValue };
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -343,7 +343,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     {
                         //https://dev.azure.com/abcdcentralus/dp-05/_apis/wit/classificationnodes?$depth=1&api-version=5.0-preview.2
                         //HttpResponseMessage response = client.GetAsync(projectName + "/_apis/work/teamsettings/iterations?api-version=" + _configuration.VersionNumber).Result;
-                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/" + projectName + "/_apis/wit/classificationnodes?$depth=1&api-version=5.0-preview.2").Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/_apis/wit/classificationnodes?$depth=1&api-version=5.0-preview.2").Result;
                         if (response.IsSuccessStatusCode)
                         {
                             viewModel = response.Content.ReadAsAsync<TeamIterationsResponse.Iterations>().Result;
@@ -442,7 +442,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     TeamResponse viewModel = new TeamResponse();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/_apis/projects/" + projectName + "/teams/" + teamaName + "?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/projects/" + projectName + "/teams/" + teamaName + "?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             viewModel = response.Content.ReadAsAsync<TeamResponse>().Result;
