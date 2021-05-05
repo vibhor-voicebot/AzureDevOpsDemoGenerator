@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using NLog;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,6 +11,7 @@ namespace AzureDevOpsAPI.Services
     public class HttpServices
     {
         private AppConfiguration oConfiguration = new AppConfiguration();
+        Logger logger = LogManager.GetLogger("*");
         public HttpServices(AppConfiguration config)
         {
             oConfiguration.UriString = config.UriString;
@@ -47,6 +50,7 @@ namespace AzureDevOpsAPI.Services
                 var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                 var method = new HttpMethod("POST");
                 var request = new HttpRequestMessage(method, oConfiguration.UriString + uriparams + oConfiguration.VersionNumber) { Content = jsonContent };
+                logger.Info("POST request ++++++++++++++################################" + request);
                 oHttpResponseMessage = client.SendAsync(request).Result;
             }
             return oHttpResponseMessage;
