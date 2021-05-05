@@ -37,7 +37,7 @@ namespace AzureDevOpsAPI.Build
                         var method = new HttpMethod("POST");
 
                         string uri = "";
-                        uri = Configuration.UriString + project + "/_apis/build/definitions?api-version=" + Configuration.VersionNumber;
+                        uri = "https://dev.azure.com/" + Configuration.UriString + project + "/_apis/build/definitions?api-version=" + Configuration.VersionNumber;
                         var request = new HttpRequestMessage(method, uri) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
@@ -92,7 +92,7 @@ namespace AzureDevOpsAPI.Build
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, project + "/_apis/build/builds?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "/_apis/build/builds?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {

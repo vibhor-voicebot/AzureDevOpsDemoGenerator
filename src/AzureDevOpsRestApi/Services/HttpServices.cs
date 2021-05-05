@@ -30,7 +30,7 @@ namespace AzureDevOpsAPI.Services
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", oConfiguration.PersonalAccessToken);
                 var patchValue = new StringContent(oConfiguration.RequestBody, Encoding.UTF8, "application/json-patch+json"); // mediaType needs to be application/json-patch+json for a patch call
-                var request = new HttpRequestMessage(new HttpMethod("PATCH"), oConfiguration.UriString + "/" + oConfiguration.Project + oConfiguration.UriParams + oConfiguration.VersionNumber) { Content = patchValue };
+                var request = new HttpRequestMessage(new HttpMethod("PATCH"), "https://dev.azure.com/" + oConfiguration.UriString + "/" + oConfiguration.Project + oConfiguration.UriParams + oConfiguration.VersionNumber) { Content = patchValue };
                 oHttpResponseMessage = client.SendAsync(request).Result;
             }
             return oHttpResponseMessage;
@@ -46,7 +46,7 @@ namespace AzureDevOpsAPI.Services
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", oConfiguration.PersonalAccessToken);
                 var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                 var method = new HttpMethod("POST");
-                var request = new HttpRequestMessage(method, oConfiguration.UriString + uriparams) { Content = jsonContent };
+                var request = new HttpRequestMessage(method, oConfiguration.UriString + uriparams + oConfiguration.VersionNumber) { Content = jsonContent };
                 oHttpResponseMessage = client.SendAsync(request).Result;
             }
             return oHttpResponseMessage;
