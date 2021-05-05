@@ -266,7 +266,7 @@ namespace AzureDevOpsAPI.Extractor
                                 {
                                     using (var clients = GetHttpClient())
                                     {
-                                        HttpResponseMessage resp = client.GetAsync("https://vsrm.dev.azure.com/" + Configuration.UriString + "/" + Project + "/_apis/release/definitions/" + rel.Id).Result;
+                                        HttpResponseMessage resp = client.GetAsync("https://vsrm.dev.azure.com/" + Configuration.UriString + "/" + Project + "/_apis/release/definitions/" + rel.Id +"?api-version=" + Configuration.VersionNumber).Result;
                                         if (resp.IsSuccessStatusCode && resp.StatusCode == System.Net.HttpStatusCode.OK)
                                         {
                                             JObject obj = new JObject();

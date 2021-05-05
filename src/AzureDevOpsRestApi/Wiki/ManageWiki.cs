@@ -131,7 +131,7 @@ namespace AzureDevOpsAPI.Wiki
                         var jsonContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
                         var method = new HttpMethod("POST");
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + projectName + "/_apis/wiki/wikis/" + wikiId + "/pagemoves?&api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + projectName + "/_apis/wiki/wikis/" + wikiId + "/pagemoves?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         HttpResponseMessage response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {

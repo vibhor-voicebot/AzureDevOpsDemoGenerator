@@ -357,7 +357,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                     //https://dev.azure.com/balajida/sss12/_apis/wit/queries?$expand=wiql&$depth=2&api-version=4.1
                     using (var client = GetHttpClient())
                     {
-                        string request = string.Format("https://dev.azure.com/" + "{0}{1}/_apis/wit/queries?$expand=wiql&$depth=2&{2}", Configuration.UriString, Project, Configuration.VersionNumber);
+                        string request = string.Format("https://dev.azure.com/" + "{0}{1}/_apis/wit/queries?$expand=wiql&depth=2?api-version={2}", Configuration.UriString, Project, Configuration.VersionNumber);
                         HttpResponseMessage response = client.GetAsync(request).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                         {

@@ -360,7 +360,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                                             value = new
                                             {
                                                 rel = rel.Rel,
-                                                url = "https://dev.azure.com/" + Configuration.UriString + "/_apis/wit/workitems/" + newWIID,
+                                                url = "https://dev.azure.com/" + Configuration.UriString + "/_apis/wit/workitems/" + newWIID + "?api-version=" + Configuration.VersionNumber,
                                                 attributes = new
                                                 {
                                                     comment = "Making a new link for the dependency"
