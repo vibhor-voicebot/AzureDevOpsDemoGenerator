@@ -32,7 +32,7 @@ namespace AzureDevOpsAPI.Git
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, Configuration.UriString + project + "/_apis/git/repositories/" + repositoryId + "/importRequests?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "/_apis/git/repositories/" + repositoryId + "/importRequests?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -80,7 +80,7 @@ namespace AzureDevOpsAPI.Git
                     GetAllRepositoriesResponse.Repositories viewModel = new GetAllRepositoriesResponse.Repositories();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(project + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + project + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             viewModel = response.Content.ReadAsAsync<GetAllRepositoriesResponse.Repositories>().Result;
@@ -128,7 +128,7 @@ namespace AzureDevOpsAPI.Git
                     GetAllRepositoriesResponse.Repositories viewModel = new GetAllRepositoriesResponse.Repositories();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(repoName + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + repoName + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             viewModel = response.Content.ReadAsAsync<GetAllRepositoriesResponse.Repositories>().Result;
@@ -179,7 +179,7 @@ namespace AzureDevOpsAPI.Git
                     GetAllRepositoriesResponse.Repositories viewModel = new GetAllRepositoriesResponse.Repositories();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             viewModel = response.Content.ReadAsAsync<GetAllRepositoriesResponse.Repositories>().Result;
@@ -235,7 +235,7 @@ namespace AzureDevOpsAPI.Git
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, Configuration.UriString + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -288,7 +288,7 @@ namespace AzureDevOpsAPI.Git
                     using (var client = GetHttpClient())
                     {
                         var method = new HttpMethod("DELETE");
-                        var request = new HttpRequestMessage(method, Configuration.UriString + Project + "/_apis/git/repositories/" + repositoryId + "?api-version=" + Configuration.VersionNumber);
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + Project + "/_apis/git/repositories/" + repositoryId + "?api-version=" + Configuration.VersionNumber);
                         var response = client.SendAsync(request).Result;
 
                         return response.IsSuccessStatusCode;
@@ -331,7 +331,7 @@ namespace AzureDevOpsAPI.Git
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, Project + "/_apis/git/repositories/" + repositoryId + "/pullRequests?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + Project + "/_apis/git/repositories/" + repositoryId + "/pullRequests?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -387,7 +387,7 @@ namespace AzureDevOpsAPI.Git
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, Project + "/_apis/git/repositories/" + repositorId + "/pullRequests/" + pullRequestId + "/threads?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + Project + "/_apis/git/repositories/" + repositorId + "/pullRequests/" + pullRequestId + "/threads?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -442,7 +442,7 @@ namespace AzureDevOpsAPI.Git
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, Project + "/_apis/git/repositories/" + repositorId + "/pullRequests/" + pullRequestId + "/threads/" + threadId + "/comments?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + Project + "/_apis/git/repositories/" + repositorId + "/pullRequests/" + pullRequestId + "/threads/" + threadId + "/comments?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)

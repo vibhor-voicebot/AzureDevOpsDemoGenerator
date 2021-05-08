@@ -33,8 +33,8 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, client.BaseAddress + "/_apis/projects/" + project + "/teams?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
-                        request.Headers.Add("api-version", "5.0");
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/_apis/projects/" + project + "/teams?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        //request.Headers.Add("api-version", "5.0");
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -140,7 +140,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                         var method = new HttpMethod("POST");
 
                         var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/_apis/wit/classificationNodes/areas?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
-                        request.Headers.Add("api-version", "5.0");
+                        //request.Headers.Add("api-version", "5.0");
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -245,7 +245,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/" + projectName + "/_apis/work/teamsettings?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/_apis/work/teamsettings?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             TeamSettingResponse.TeamSetting viewModel = new TeamSettingResponse.TeamSetting();
@@ -295,8 +295,8 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     {
                         var postValue = new StringContent(JsonConvert.SerializeObject(objJson), Encoding.UTF8, "application/json");
                         var method = new HttpMethod("PATCH");
-                        var request = new HttpRequestMessage(method, client.BaseAddress + "/" + projectName + "/" + teamName + "/_apis/work/teamsettings?api-version=" + Configuration.VersionNumber) { Content = postValue };
-                        request.Headers.Add("api-version", "5.0");
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/" + teamName + "/_apis/work/teamsettings?api-version=" + Configuration.VersionNumber) { Content = postValue };
+                        //request.Headers.Add("api-version", "5.0");
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -396,8 +396,8 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                         var jsonContent = new StringContent(JsonConvert.SerializeObject(objJson), Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, client.BaseAddress + "/" + projectName + "/" + teamName + "/_apis/work/teamsettings/iterations?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
-                        request.Headers.Add("api-version", "5.0");
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/" + teamName + "/_apis/work/teamsettings/iterations?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        //request.Headers.Add("api-version", "5.0");
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -497,7 +497,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
 
                         var method = new HttpMethod("PATCH");
 
-                        var request = new HttpRequestMessage(method, client.BaseAddress + "/" + projectName + "/" + projectName + "%20Team/_apis/work/teamsettings/teamfieldvalues?api-version=" + Configuration.VersionNumber) { Content = patchValue };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/" + projectName + "%20Team/_apis/work/teamsettings/teamfieldvalues?api-version=" + Configuration.VersionNumber) { Content = patchValue };
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
