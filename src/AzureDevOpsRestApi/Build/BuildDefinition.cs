@@ -37,7 +37,8 @@ namespace AzureDevOpsAPI.Build
                         var method = new HttpMethod("POST");
 
                         string uri = "";
-                        uri = "https://dev.azure.com/" + Configuration.UriString + project + "/_apis/build/definitions?api-version=" + Configuration.VersionNumber;
+                        uri = "https://dev.azure.com/" + Configuration.UriString + "/" + project + "/_apis/build/definitions?api-version=" + Configuration.VersionNumber;
+                        logger.Info("BuildDef.....++++++++++++=" + uri);
                         var request = new HttpRequestMessage(method, uri) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
@@ -46,6 +47,7 @@ namespace AzureDevOpsAPI.Build
                             string result = response.Content.ReadAsStringAsync().Result;
                             string buildId = JObject.Parse(result)["id"].ToString();
                             string buildName = JObject.Parse(result)["name"].ToString();
+                            logger.Info("BuildDef response.....++++++++++++=" + buildName);
                             return (buildId, buildName);
                         }
                         else

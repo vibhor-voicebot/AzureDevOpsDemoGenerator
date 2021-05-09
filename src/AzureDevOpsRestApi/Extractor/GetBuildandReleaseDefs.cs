@@ -220,9 +220,11 @@ namespace AzureDevOpsAPI.Extractor
                         }
                         else
                         {
+                            
                             var errorMessage = response.Content.ReadAsStringAsync();
                             string error = Utility.GeterroMessage(errorMessage.Result.ToString());
                             LastFailureMessage = error;
+                            logger.Info("repository error++++++++++++++++++++" + error);
                             retryCount++;
                         }
                     }

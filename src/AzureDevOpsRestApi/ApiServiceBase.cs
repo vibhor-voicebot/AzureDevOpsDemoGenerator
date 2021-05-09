@@ -30,15 +30,21 @@ namespace AzureDevOpsAPI
             logger.Info("Configuration #######################" + Configuration);
             Credentials = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", "", Configuration.PersonalAccessToken)));//configuration.PersonalAccessToken;
             Project = configuration.Project;
+            logger.Info("ConfigurationProject #######################" + Project);
             Account = configuration.AccountName;
+            logger.Info("ConfigurationAccount #######################" + Account);
             Team = configuration.Team;
+            logger.Info("ConfigurationTeam #######################" + Team);
             ProjectId = configuration.ProjectId;
+            logger.Info("ConfigurationProjectId #######################" + ProjectId);
 
             BaseAddress = configuration.GitBaseAddress;
+            logger.Info("ConfigurationBaseAddress #######################" + BaseAddress);
             MediaType = configuration.MediaType;
             Scheme = configuration.Scheme;
             GitCredential = configuration.GitCredential;
             UserName = configuration.UserName;
+            logger.Info("ConfigurationUserName #######################" + UserName);
         }
 
         protected HttpClient GetHttpClient()
