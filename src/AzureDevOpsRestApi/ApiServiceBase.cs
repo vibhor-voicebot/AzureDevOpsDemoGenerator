@@ -27,6 +27,7 @@ namespace AzureDevOpsAPI
         public ApiServiceBase(IAppConfiguration configuration)
         {
             Configuration = configuration;
+            logger.Info("Configuration #######################" + Configuration);
             Credentials = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", "", Configuration.PersonalAccessToken)));//configuration.PersonalAccessToken;
             Project = configuration.Project;
             Account = configuration.AccountName;
@@ -57,6 +58,7 @@ namespace AzureDevOpsAPI
         }
         protected HttpClient GitHubHttpClient()
         {
+            logger.Info("GitHubHttpClient BaseAddress ++++++++++++++################################" + BaseAddress);
             var client = new HttpClient
             {
                 BaseAddress = new Uri(BaseAddress)

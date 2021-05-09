@@ -215,6 +215,7 @@ namespace AzureDevOpsAPI.Extractor
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
                             RepositoryList.Repository repository = JsonConvert.DeserializeObject<RepositoryList.Repository>(result);
+                            logger.Info("repository++++++++++++++++++++" + repository);
                             return repository;
                         }
                         else
