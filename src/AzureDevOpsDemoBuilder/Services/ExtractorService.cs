@@ -115,7 +115,7 @@ namespace AzureDevOpsDemoBuilder.Services
             string boardVersion = AppKeyConfiguration["BoardVersion"];
             string workItemsVersion = AppKeyConfiguration["WorkItemsVersion"];
             string releaseHost = AppKeyConfiguration["ReleaseHost"];
-            string defaultHost = AppKeyConfiguration["DefaultHost"];
+            string defaultHost = "https://dev.azure.com/";
             string extensionHost = AppKeyConfiguration["ExtensionHost"];
             string getReleaseVersion = AppKeyConfiguration["GetRelease"];
             string agentQueueVersion = AppKeyConfiguration["AgentQueueVersion"];
