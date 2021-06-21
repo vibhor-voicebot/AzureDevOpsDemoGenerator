@@ -15,9 +15,9 @@ namespace AzureDevOpsAPI.Git
     {
         Logger logger = LogManager.GetLogger("*");
         private TelemetryClient ai;
-        public GitHubImportRepo(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration)
+        public GitHubImportRepo(IAppConfiguration configuration) : base(configuration)
         {
-            ai = _ai;
+           
         }
 
         public HttpResponseMessage GetUserDetail()
@@ -37,7 +37,7 @@ namespace AzureDevOpsAPI.Git
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+               
                 logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
             }
             return new HttpResponseMessage();
@@ -63,7 +63,7 @@ namespace AzureDevOpsAPI.Git
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+               
                 logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
             }
             return res;
@@ -85,7 +85,7 @@ namespace AzureDevOpsAPI.Git
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+               
                 logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
             }
             return res;
@@ -110,7 +110,7 @@ namespace AzureDevOpsAPI.Git
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+               
                 logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
             }
             return res;
@@ -142,7 +142,7 @@ namespace AzureDevOpsAPI.Git
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+              
                 logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
             }
             return new HttpResponseMessage(HttpStatusCode.InternalServerError);
@@ -172,7 +172,7 @@ namespace AzureDevOpsAPI.Git
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+               
                 logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
             }
             return new HttpResponseMessage(HttpStatusCode.InternalServerError);
@@ -203,7 +203,7 @@ namespace AzureDevOpsAPI.Git
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+                
                 logger.Info(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t" + ex.Message + "\n" + ex.StackTrace + "\n");
             }
             return res;
@@ -237,7 +237,7 @@ namespace AzureDevOpsAPI.Git
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+              
                 logger.Info(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t" + ex.Message + "\n" + ex.StackTrace + "\n");
             }
             return res;
@@ -264,7 +264,7 @@ namespace AzureDevOpsAPI.Git
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+               
                 logger.Info(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t" + ex.Message + "\n" + ex.StackTrace + "\n");
             }
             return res;

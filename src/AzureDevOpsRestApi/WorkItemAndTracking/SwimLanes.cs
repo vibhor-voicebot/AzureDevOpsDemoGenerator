@@ -10,7 +10,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
     public class SwimLanes : ApiServiceBase
     {
         private TelemetryClient ai;
-        public SwimLanes(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
+        public SwimLanes(IAppConfiguration configuration) : base(configuration) {}
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Update swim lanes
@@ -48,7 +48,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                  
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
