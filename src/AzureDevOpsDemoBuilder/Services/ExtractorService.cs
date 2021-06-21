@@ -115,7 +115,8 @@ namespace AzureDevOpsDemoBuilder.Services
             string boardVersion = AppKeyConfiguration["BoardVersion"];
             string workItemsVersion = AppKeyConfiguration["WorkItemsVersion"];
             string releaseHost = AppKeyConfiguration["ReleaseHost"];
-            string defaultHost = "https://dev.azure.com/";
+            string defaultHost = AppKeyConfiguration["DefaultHost"];
+            //string defaultHost = "";
             string extensionHost = AppKeyConfiguration["ExtensionHost"];
             string getReleaseVersion = AppKeyConfiguration["GetRelease"];
             string agentQueueVersion = AppKeyConfiguration["AgentQueueVersion"];
@@ -129,12 +130,12 @@ namespace AzureDevOpsDemoBuilder.Services
             projectConfig.WorkItemConfig = new AppConfiguration() { UriString = defaultHost + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id, VersionNumber = wikiVersion };
             projectConfig.BuildDefinitionConfig = new AppConfiguration() { UriString = defaultHost + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id, VersionNumber = buildVersion };
             projectConfig.ReleaseDefinitionConfig = new AppConfiguration() { UriString = releaseHost + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id, VersionNumber = releaseVersion };
-            projectConfig.RepoConfig = new AppConfiguration() { UriString = defaultHost + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id, VersionNumber = repoVersion };
+            projectConfig.RepoConfig = new AppConfiguration() { UriString = "https://dev.azure.com/" + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id, VersionNumber = repoVersion };
             projectConfig.BoardConfig = new AppConfiguration() { UriString = defaultHost + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id, VersionNumber = boardVersion };
             projectConfig.Config = new AppConfiguration() { UriString = defaultHost + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id };
             projectConfig.GetReleaseConfig = new AppConfiguration() { UriString = releaseHost + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id, VersionNumber = getReleaseVersion };
             projectConfig.ExtensionConfig = new AppConfiguration() { UriString = extensionHost + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id, VersionNumber = extensionVersion };
-            projectConfig.EndpointConfig = new AppConfiguration() { UriString = defaultHost + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id, VersionNumber = endpointVersion };
+            projectConfig.EndpointConfig = new AppConfiguration() { UriString = "https://dev.azure.com/" + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id, VersionNumber = endpointVersion };
             projectConfig.QueriesConfig = new AppConfiguration() { UriString = defaultHost + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id, VersionNumber = queriesVersion };
             projectConfig.VariableGroupConfig = new AppConfiguration() { UriString = defaultHost + model.AccountName + "/", PersonalAccessToken = model.AccessToken, Project = model.ProjectName, AccountName = model.AccountName, Id = model.Id, VersionNumber = variableGroupsApiVersion };
 
