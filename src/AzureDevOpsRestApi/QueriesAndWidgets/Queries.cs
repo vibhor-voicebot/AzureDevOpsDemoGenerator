@@ -7,12 +7,14 @@ using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.Extractor;
 using AzureDevOpsAPI.Viewmodel.QueriesAndWidgets;
+using Microsoft.ApplicationInsights;
 
 namespace AzureDevOpsAPI.QueriesAndWidgets
 {
     public class Queries : ApiServiceBase
     {
-        public Queries(IAppConfiguration configuration) : base(configuration) { }
+        private TelemetryClient ai;
+        public Queries(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
         Logger logger = LogManager.GetLogger("*");
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                     string dashBoardId = string.Empty;
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + projectName + "/" + projectName + "%20Team/_apis/dashboard/dashboards?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(projectName + "/" + projectName + "%20Team/_apis/dashboard/dashboards?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             DashboardResponse.Dashboard dashBoard = response.Content.ReadAsAsync<DashboardResponse.Dashboard>().Result;
@@ -51,6 +53,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -84,7 +87,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                     {
                         //Since we were getting errors like "you do not have access to shared query folder", based on MS team guidence added GET call before POST request
                         //Adding delay to generate Shared Query model in Azure DevOps
-                        HttpResponseMessage responseParent = clientParent.GetAsync("https://dev.azure.com/" + Configuration.UriString + project + "/_apis/wit/queries?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage responseParent = clientParent.GetAsync(project + "/_apis/wit/queries?api-version=" + Configuration.VersionNumber).Result;
                         Thread.Sleep(2000);
                         if (responseParent.IsSuccessStatusCode && responseParent.StatusCode == System.Net.HttpStatusCode.OK)
                         {
@@ -93,7 +96,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                                 var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                                 var method = new HttpMethod("POST");
 
-                                var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "/_apis/wit/queries/Shared%20Queries?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                                var request = new HttpRequestMessage(method, project + "/_apis/wit/queries/Shared%20Queries?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                                 var response = client.SendAsync(request).Result;
                                 if (response.IsSuccessStatusCode)
                                 {
@@ -114,6 +117,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                 }
                 catch (OperationCanceledException opr)
                 {
+                    ai.TrackException(opr);
                     logger.Debug(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t OperationCanceledException: " + opr.Message + "\n" + opr.StackTrace + "\n");
                     LastFailureMessage = opr.Message + " ," + opr.StackTrace;
                     retryCount++;
@@ -161,7 +165,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                         var patchValue = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("PATCH");
 
-                        var request = new HttpRequestMessage(method, string.Format("https://dev.azure.com/" + Configuration.UriString + "{0}/_apis/wit/queries/{1}?api-version=" + Configuration.VersionNumber, project, query)) { Content = patchValue };
+                        var request = new HttpRequestMessage(method, string.Format("{0}/_apis/wit/queries/{1}?api-version=" + Configuration.VersionNumber, project, query)) { Content = patchValue };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -178,6 +182,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -209,7 +214,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + project + "/_apis/wit/queries/" + path + "/" + queryName + "?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(project + "/_apis/wit/queries/" + path + "/" + queryName + "?api-version=" + Configuration.VersionNumber).Result;
 
                         if (response.IsSuccessStatusCode)
                         {
@@ -227,6 +232,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -260,7 +266,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                         using (var client = GetHttpClient())
                         {
                             var method = new HttpMethod("DELETE");
-                            var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "/" + project + "%20Team/_apis/dashboard/dashboards/" + dashBoardId + "?api-version=" + Configuration.VersionNumber);
+                            var request = new HttpRequestMessage(method, project + "/" + project + "%20Team/_apis/dashboard/dashboards/" + dashBoardId + "?api-version=" + Configuration.VersionNumber);
                             var response = client.SendAsync(request).Result;
 
                             if (response.IsSuccessStatusCode)
@@ -278,6 +284,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -312,7 +319,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "/" + project + "%20Team/_apis/dashboard/dashboards?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, project + "/" + project + "%20Team/_apis/dashboard/dashboards?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -332,6 +339,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -357,7 +365,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                     //https://dev.azure.com/balajida/sss12/_apis/wit/queries?$expand=wiql&$depth=2&api-version=4.1
                     using (var client = GetHttpClient())
                     {
-                        string request = string.Format("https://dev.azure.com/" + "{0}{1}/_apis/wit/queries?$expand=wiql&$depth=2&api-version={2}", Configuration.UriString, Project, Configuration.VersionNumber);
+                        string request = string.Format("{0}{1}/_apis/wit/queries?$expand=wiql&$depth=2&{2}", Configuration.UriString, Project, Configuration.VersionNumber);
                         HttpResponseMessage response = client.GetAsync(request).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
@@ -376,6 +384,7 @@ namespace AzureDevOpsAPI.QueriesAndWidgets
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

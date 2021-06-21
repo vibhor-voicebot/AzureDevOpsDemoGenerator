@@ -1,19 +1,20 @@
-﻿using NLog;
+﻿    using NLog;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.Extractor;
+using Microsoft.ApplicationInsights;
 
 namespace AzureDevOpsAPI.Extractor
 {
     public class GetWorkItemsCount : ApiServiceBase
     {
-
-        public GetWorkItemsCount(IAppConfiguration configuration) : base(configuration)
+        private TelemetryClient ai;
+        public GetWorkItemsCount(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration)
         {
-
+            ai = _ai;
         }
          Logger logger = LogManager.GetLogger("*");
         public class WiMapData
@@ -54,7 +55,7 @@ namespace AzureDevOpsAPI.Extractor
                         var method = new HttpMethod("POST");
 
                         // send the request               
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/_apis/wit/wiql?api-version=" + Configuration.VersionNumber) { Content = postValue };
+                        var request = new HttpRequestMessage(method, Configuration.UriString + "/_apis/wit/wiql?api-version=" + Configuration.VersionNumber) { Content = postValue };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -82,6 +83,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -114,7 +116,7 @@ namespace AzureDevOpsAPI.Extractor
                     {
                         using (var client = GetHttpClient())
                         {
-                            HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/wit/workitems?api-version=" + Configuration.VersionNumber + "&ids=" + workitemstoFetch + "&$expand=relations").Result;
+                            HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/_apis/wit/workitems?api-version=" + Configuration.VersionNumber + "&ids=" + workitemstoFetch + "&$expand=relations").Result;
                             if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
                                 viewModel = response.Content.ReadAsAsync<WorkItemFetchResponse.WorkItems>().Result;
@@ -131,6 +133,7 @@ namespace AzureDevOpsAPI.Extractor
                     }
                     catch (Exception ex)
                     {
+                        ai.TrackException(ex);
                         logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                         string error = ex.Message;
                         this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
@@ -160,7 +163,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/_apis/wit/workitemtypes?api-version={2}", Configuration.UriString, Configuration.Project, Configuration.VersionNumber)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/{1}/_apis/wit/workitemtypes?api-version={2}", Configuration.UriString, Configuration.Project, Configuration.VersionNumber)).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             WorkItemNames.Names workItemNames = JsonConvert.DeserializeObject<WorkItemNames.Names>(response.Content.ReadAsStringAsync().Result);
@@ -177,6 +180,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

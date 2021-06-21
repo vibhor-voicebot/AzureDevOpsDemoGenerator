@@ -31,7 +31,7 @@ namespace AzureDevOpsAPI.DeliveryPlans
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "_apis/work/plans?api-version=3.0-preview.1") { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, project + "_apis/work/plans?api-version=3.0-preview.1") { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {

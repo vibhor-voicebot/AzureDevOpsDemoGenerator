@@ -6,12 +6,14 @@ using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.Extractor;
 using AzureDevOpsAPI.Viewmodel.Service;
+using Microsoft.ApplicationInsights;
 
 namespace AzureDevOpsAPI.Service
 {
     public class ServiceEndPoint : ApiServiceBase
     {
-        public ServiceEndPoint(IAppConfiguration configuration) : base(configuration) { }
+        private TelemetryClient ai;
+        public ServiceEndPoint(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
         Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Create service endpoints
@@ -33,7 +35,7 @@ namespace AzureDevOpsAPI.Service
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/" + project + "/_apis/distributedtask/serviceendpoints?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, project + "/_apis/distributedtask/serviceendpoints?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -53,6 +55,7 @@ namespace AzureDevOpsAPI.Service
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("CreateServiceEndPoint" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -78,7 +81,7 @@ namespace AzureDevOpsAPI.Service
                     //https://dev.azure.com/exakshay/endpoint/_apis/serviceendpoint/endpoints?api-version=4.1-preview.1
                     using (var client = GetHttpClient())
                     {
-                        var request = string.Format("https://dev.azure.com/" + "{0}/{1}/_apis/serviceendpoint/endpoints?api-version={2}", Configuration.UriString, Project, Configuration.VersionNumber);
+                        var request = string.Format("{0}{1}/_apis/serviceendpoint/endpoints?api-version={2}", Configuration.UriString, Project, Configuration.VersionNumber);
                         HttpResponseMessage response = client.GetAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -97,6 +100,7 @@ namespace AzureDevOpsAPI.Service
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("GetServiceEndPoints" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

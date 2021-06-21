@@ -9,12 +9,14 @@ using AzureDevOpsAPI.Viewmodel.Sprint;
 using AzureDevOpsAPI.Viewmodel.WorkItem;
 using System.IO;
 using AzureDevOpsRestApi.Viewmodel.ProjectAndTeams;
+using Microsoft.ApplicationInsights;
 
 namespace AzureDevOpsAPI.WorkItemAndTracking
 {
     public partial class ClassificationNodes : ApiServiceBase
     {
-        public ClassificationNodes(IAppConfiguration configuration) : base(configuration) { }
+        private TelemetryClient ai;
+        public ClassificationNodes(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
         Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Get Iteration
@@ -31,7 +33,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                     GetNodesResponse.Nodes viewModel = new GetNodesResponse.Nodes();
                     using (HttpClient client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/" + Configuration.UriString + "{0}/_apis/wit/classificationNodes/iterations?$depth=5&api-version=" + Configuration.VersionNumber, projectName)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/_apis/wit/classificationNodes/iterations?$depth=5&api-version=" + Configuration.VersionNumber, projectName)).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             if (response.IsSuccessStatusCode)
@@ -52,6 +54,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -90,7 +93,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         var jsonContent = new StringContent(JsonConvert.SerializeObject(node), Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/_apis/wit/classificationNodes/iterations?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, Configuration.UriString + "/" + projectName + "/_apis/wit/classificationNodes/iterations?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -108,6 +111,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -148,7 +152,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         var jsonContent = new StringContent(JsonConvert.SerializeObject(node), Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, string.Format("https://dev.azure.com/" + Configuration.UriString + "/{0}/_apis/wit/classificationNodes/iterations/{1}?api-version=" + Configuration.VersionNumber, projectName, targetIteration)) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, string.Format("/{0}/_apis/wit/classificationNodes/iterations/{1}?api-version=" + Configuration.VersionNumber, projectName, targetIteration)) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -167,6 +171,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -283,6 +288,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (OperationCanceledException opr)
                 {
+                    ai.TrackException(opr);
                     logger.Info(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t OperationCanceledException: " + opr.Message + "\n" + opr.StackTrace + "\n");
                     LastFailureMessage = opr.Message + " ," + opr.StackTrace;
                     retryCount++;
@@ -296,6 +302,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -345,7 +352,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         var method = new HttpMethod("PATCH");
 
                         // send the request
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "/_apis/wit/classificationNodes/iterations/" + path + "?api-version=" + Configuration.VersionNumber) { Content = patchValue };
+                        var request = new HttpRequestMessage(method, project + "/_apis/wit/classificationNodes/iterations/" + path + "?api-version=" + Configuration.VersionNumber) { Content = patchValue };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -372,6 +379,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -415,7 +423,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                             var method = new HttpMethod("PATCH");
 
                             // send the request
-                            var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + projectName + "/_apis/wit/classificationNodes/Iterations/" + key + "?api-version=" + Configuration.VersionNumber) { Content = patchValue };
+                            var request = new HttpRequestMessage(method, projectName + "/_apis/wit/classificationNodes/Iterations/" + key + "?api-version=" + Configuration.VersionNumber) { Content = patchValue };
                             var response = client.SendAsync(request).Result;
 
                             if (response.IsSuccessStatusCode)
@@ -451,6 +459,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -476,7 +485,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                     SprintResponse.Sprints sprints = new SprintResponse.Sprints();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + project + "/" + project + "%20Team/_apis/work/teamsettings/iterations?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(project + "/" + project + "%20Team/_apis/work/teamsettings/iterations?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
@@ -494,6 +503,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

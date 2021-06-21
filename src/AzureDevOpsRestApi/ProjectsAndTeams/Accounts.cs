@@ -3,12 +3,14 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.ProjectAndTeams;
+using Microsoft.ApplicationInsights;
 
 namespace AzureDevOpsAPI.ProjectsAndTeams
 {
     public class Accounts : ApiServiceBase
     {
-        public Accounts(IAppConfiguration configuration) : base(configuration) { }
+        private TelemetryClient ai;
+        public Accounts(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Get Account members
@@ -27,7 +29,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     using (var client = GetHttpClient())
                     {
                         // connect to the REST endpoint            
-                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/userentitlements?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("/_apis/userentitlements?api-version=" + Configuration.VersionNumber).Result;
 
                         // check to see if we have a succesfull respond
                         if (response.IsSuccessStatusCode)
@@ -39,6 +41,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("CreateReleaseDefinition" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

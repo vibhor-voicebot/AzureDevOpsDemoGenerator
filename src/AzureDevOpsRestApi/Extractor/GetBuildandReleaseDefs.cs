@@ -7,12 +7,14 @@ using System.Net.Http;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.Extractor;
 using AzureDevOpsAPI.Viewmodel.Queue;
+using Microsoft.ApplicationInsights;
 
 namespace AzureDevOpsAPI.Extractor
 {
     public class BuildandReleaseDefs : ApiServiceBase
     {
-        public BuildandReleaseDefs(IAppConfiguration configuration) : base(configuration) { }
+        private TelemetryClient ai;
+        public BuildandReleaseDefs(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
          Logger logger = LogManager.GetLogger("*");
         //https://d2a2v2.visualstudio.com/selenium2/_apis/build/definitions?api-version=4.1
         // Get Build Definition count
@@ -25,7 +27,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Account + "/" + Project + "/_apis/build/definitions?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/" + Project + "/_apis/build/definitions?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
@@ -42,6 +44,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -69,7 +72,7 @@ namespace AzureDevOpsAPI.Extractor
                     using (var client = GetHttpClient())
                     {
 
-                        HttpResponseMessage response = client.GetAsync("https://vsrm.dev.azure.com/" + Account + "/" + Project + "/_apis/release/definitions?api-version=4.1-preview.3").Result;
+                        HttpResponseMessage response = client.GetAsync("https://vsrm.dev.azure.com/" + Account + "//" + Project + "/_apis/release/definitions?api-version=4.1-preview.3").Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
@@ -86,6 +89,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -111,7 +115,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("https://vsrm.dev.azure.com/" + Account + "/" + Project + "/_apis/release/definitions?api-version=4.1-preview.3").Result;
+                        HttpResponseMessage response = client.GetAsync(Project + "/_apis/release/definitions?api-version=4.1-preview.3").Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
@@ -128,7 +132,8 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
-                   logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
+                    ai.TrackException(ex);
+                    logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
 
@@ -154,7 +159,7 @@ namespace AzureDevOpsAPI.Extractor
                     List<JObject> resultList = new List<JObject>();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/" + Account + "/{0}/_apis/build/definitions?api-version=" + Configuration.VersionNumber, Project)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/_apis/build/definitions?api-version=" + Configuration.VersionNumber, Project)).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             BuildDefinitionResponse.Build definitions = Newtonsoft.Json.JsonConvert.DeserializeObject<BuildDefinitionResponse.Build>(response.Content.ReadAsStringAsync().Result.ToString());
@@ -165,7 +170,7 @@ namespace AzureDevOpsAPI.Extractor
                                     BuildDefinitions.BuildDefinition definitionResult = new BuildDefinitions.BuildDefinition();
                                     using (var client1 = GetHttpClient())
                                     {
-                                        HttpResponseMessage responseDef = client1.GetAsync(string.Format("https://dev.azure.com/" + Account + "/{0}/_apis/build/definitions/{1}?api-version=" + Configuration.VersionNumber, Project, value.Id)).Result;
+                                        HttpResponseMessage responseDef = client1.GetAsync(string.Format("{0}/_apis/build/definitions/{1}?api-version=" + Configuration.VersionNumber, Project, value.Id)).Result;
                                         if (response.IsSuccessStatusCode)
                                         {
                                             string result = responseDef.Content.ReadAsStringAsync().Result;
@@ -185,6 +190,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -210,27 +216,25 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Account + "/" + Project + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/" + Project + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
                             RepositoryList.Repository repository = JsonConvert.DeserializeObject<RepositoryList.Repository>(result);
-                            logger.Info("repository++++++++++++++++++++" + repository);
                             return repository;
                         }
                         else
                         {
-                            
                             var errorMessage = response.Content.ReadAsStringAsync();
                             string error = Utility.GeterroMessage(errorMessage.Result.ToString());
                             LastFailureMessage = error;
-                            logger.Info("repository error++++++++++++++++++++" + error);
                             retryCount++;
                         }
                     }
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -257,7 +261,7 @@ namespace AzureDevOpsAPI.Extractor
                     List<JObject> jobj = new List<JObject>();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("https://vsrm.dev.azure.com/" + Account + "/" + Project + "/_apis/release/definitions?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/" + Project + "/_apis/release/definitions?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             ReleaseDefCountResponse.Release release = new ReleaseDefCountResponse.Release();
@@ -269,7 +273,7 @@ namespace AzureDevOpsAPI.Extractor
                                 {
                                     using (var clients = GetHttpClient())
                                     {
-                                        HttpResponseMessage resp = client.GetAsync("https://vsrm.dev.azure.com/" + Account + "/" + Project + "/_apis/release/definitions/" + rel.Id +"?api-version=" + Configuration.VersionNumber).Result;
+                                        HttpResponseMessage resp = client.GetAsync(Configuration.UriString + "/" + Project + "/_apis/release/definitions/" + rel.Id).Result;
                                         if (resp.IsSuccessStatusCode && resp.StatusCode == System.Net.HttpStatusCode.OK)
                                         {
                                             JObject obj = new JObject();
@@ -303,6 +307,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -328,7 +333,7 @@ namespace AzureDevOpsAPI.Extractor
 
                 using (var client = GetHttpClient())
                 {
-                    HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Account + "/" + Configuration.Project + "/_apis/distributedtask/queues?api-version=2.0-preview.1").Result;
+                    HttpResponseMessage response = client.GetAsync(Configuration.Project + "/_apis/distributedtask/queues?api-version=2.0-preview.1").Result;
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -353,6 +358,7 @@ namespace AzureDevOpsAPI.Extractor
             }
             catch (Exception ex)
             {
+                ai.TrackException(ex);
                 logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                 this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
             }

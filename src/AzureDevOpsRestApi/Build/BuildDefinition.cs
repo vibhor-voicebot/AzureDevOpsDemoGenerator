@@ -5,13 +5,16 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using AzureDevOpsRestApi.Viewmodel.Build;
+using Microsoft.ApplicationInsights;
 
 namespace AzureDevOpsAPI.Build
 {
     public class BuildDefinition : ApiServiceBase
     {
-        public BuildDefinition(IAppConfiguration configuration) : base(configuration) { }
-         Logger logger = LogManager.GetLogger("*");
+        public BuildDefinition(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
+        Logger logger = LogManager.GetLogger("*");
+        private TelemetryClient ai;
+
         /// <summary>
         /// Create Build Definition
         /// </summary>
@@ -37,8 +40,7 @@ namespace AzureDevOpsAPI.Build
                         var method = new HttpMethod("POST");
 
                         string uri = "";
-                        uri = "https://dev.azure.com/" + Configuration.UriString + "/" + project + "/_apis/build/definitions?api-version=" + Configuration.VersionNumber;
-                        logger.Info("BuildDef.....++++++++++++=" + uri);
+                        uri = Configuration.UriString + project + "/_apis/build/definitions?api-version=" + Configuration.VersionNumber;
                         var request = new HttpRequestMessage(method, uri) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
@@ -47,7 +49,6 @@ namespace AzureDevOpsAPI.Build
                             string result = response.Content.ReadAsStringAsync().Result;
                             string buildId = JObject.Parse(result)["id"].ToString();
                             string buildName = JObject.Parse(result)["name"].ToString();
-                            logger.Info("BuildDef response.....++++++++++++=" + buildName);
                             return (buildId, buildName);
                         }
                         else
@@ -61,6 +62,7 @@ namespace AzureDevOpsAPI.Build
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t" + "CreateBuildDefinition" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
 
                     retryCount++;
@@ -94,7 +96,7 @@ namespace AzureDevOpsAPI.Build
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "/_apis/build/builds?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, project + "/_apis/build/builds?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -114,6 +116,7 @@ namespace AzureDevOpsAPI.Build
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t" + "QueueBuild" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     
                     retryCount++;

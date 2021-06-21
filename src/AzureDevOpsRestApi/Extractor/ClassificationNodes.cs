@@ -6,12 +6,14 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.Extractor;
+using Microsoft.ApplicationInsights;
 
 namespace AzureDevOpsAPI.Extractor
 {
     public class ClassificationNodes : ApiServiceBase
     {
-        public ClassificationNodes(IAppConfiguration configuration) : base(configuration) { }
+        private TelemetryClient ai;
+        public ClassificationNodes(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
          Logger logger = LogManager.GetLogger("*");
         // Get Iteration Count
         public GetINumIteration.Iterations GetiterationCount()
@@ -23,7 +25,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + Configuration.Project + "/_apis/work/teamsettings/iterations?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + Configuration.Project + "/_apis/work/teamsettings/iterations?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
@@ -40,6 +42,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -67,7 +70,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/projects/" + Project + "/teams?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/_apis/projects/" + Project + "/teams?api-version=" + Configuration.VersionNumber).Result;
                         if (!response.IsSuccessStatusCode || response.StatusCode != HttpStatusCode.OK)
                         {
                             var errorMessage = response.Content.ReadAsStringAsync();
@@ -96,6 +99,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -124,12 +128,13 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/{2}/_apis/work/boards/{3}/columns?api-version={4}", Configuration.UriString, Configuration.Project, Configuration.Team, boardType, Configuration.VersionNumber)).Result;
+                        response = client.GetAsync(string.Format("{0}/{1}/{2}/_apis/work/boards/{3}/columns?api-version={4}", Configuration.UriString, Configuration.Project, Configuration.Team, boardType, Configuration.VersionNumber)).Result;
                         return response;
                     }
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -156,7 +161,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/{2}/_apis/work/boards/{3}/rows?api-version={4}", Configuration.UriString, Project, Team, boardType, Configuration.VersionNumber)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/{1}/{2}/_apis/work/boards/{3}/rows?api-version={4}", Configuration.UriString, Project, Team, boardType, Configuration.VersionNumber)).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.OK)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
@@ -175,6 +180,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -202,7 +208,7 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/{2}/_apis/work/teamsettings?api-version={3}", Configuration.UriString, Project, Team, Configuration.VersionNumber)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/{1}/{2}/_apis/work/teamsettings?api-version={3}", Configuration.UriString, Project, Team, Configuration.VersionNumber)).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.OK)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
@@ -220,6 +226,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -247,12 +254,13 @@ namespace AzureDevOpsAPI.Extractor
                     using (var client = GetHttpClient())
                     {
 
-                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/{2}/_apis/work/boards/{3}/cardsettings?api-version={4}", Configuration.UriString, Project, Team, boardType, Configuration.VersionNumber)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/{1}/{2}/_apis/work/boards/{3}/cardsettings?api-version={4}", Configuration.UriString, Project, Team, boardType, Configuration.VersionNumber)).Result;
                         return response;
                     }
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -279,12 +287,13 @@ namespace AzureDevOpsAPI.Extractor
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/{2}/_apis/work/boards/{3}/cardrulesettings?api-version={4}", Configuration.UriString, Project, Team, boardType, Configuration.VersionNumber)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/{1}/{2}/_apis/work/boards/{3}/cardrulesettings?api-version={4}", Configuration.UriString, Project, Team, boardType, Configuration.VersionNumber)).Result;
                         return response;
                     }
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -312,7 +321,7 @@ namespace AzureDevOpsAPI.Extractor
                     ExportIterations.Iterations viewModel = new ExportIterations.Iterations();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(string.Format("https://dev.azure.com/{0}/{1}/_apis/work/teamsettings/iterations?api-version={2}", Configuration.UriString, Project, Configuration.VersionNumber)).Result;
+                        HttpResponseMessage response = client.GetAsync(string.Format("{0}/{1}/_apis/work/teamsettings/iterations?api-version={2}", Configuration.UriString, Project, Configuration.VersionNumber)).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.OK)
                         {
                             string result = response.Content.ReadAsStringAsync().Result;
@@ -348,6 +357,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug(ex.Message + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

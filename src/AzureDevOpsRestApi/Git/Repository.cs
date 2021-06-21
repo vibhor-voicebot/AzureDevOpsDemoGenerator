@@ -6,12 +6,15 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.Repository;
+using Microsoft.ApplicationInsights;
 
 namespace AzureDevOpsAPI.Git
 {
     public class Repository : ApiServiceBase
     {
-        public Repository(IAppConfiguration configuration) : base(configuration) { }
+        private TelemetryClient ai;
+
+        public Repository(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
         Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Get Source Code from Git Hub
@@ -32,7 +35,7 @@ namespace AzureDevOpsAPI.Git
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "/_apis/git/repositories/" + repositoryId + "/importRequests?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, Configuration.UriString + project + "/_apis/git/repositories/" + repositoryId + "/importRequests?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -50,6 +53,7 @@ namespace AzureDevOpsAPI.Git
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("GetSourceCodeFromGitHub" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -80,7 +84,7 @@ namespace AzureDevOpsAPI.Git
                     GetAllRepositoriesResponse.Repositories viewModel = new GetAllRepositoriesResponse.Repositories();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + project + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(project + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             viewModel = response.Content.ReadAsAsync<GetAllRepositoriesResponse.Repositories>().Result;
@@ -97,6 +101,7 @@ namespace AzureDevOpsAPI.Git
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("GetRepositoryToDelete" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -128,7 +133,7 @@ namespace AzureDevOpsAPI.Git
                     GetAllRepositoriesResponse.Repositories viewModel = new GetAllRepositoriesResponse.Repositories();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + repoName + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync(repoName + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             viewModel = response.Content.ReadAsAsync<GetAllRepositoriesResponse.Repositories>().Result;
@@ -150,6 +155,7 @@ namespace AzureDevOpsAPI.Git
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("GetDefaultRepository" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n"); logger.Debug(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t" + "GetDefaultRepository" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -179,7 +185,7 @@ namespace AzureDevOpsAPI.Git
                     GetAllRepositoriesResponse.Repositories viewModel = new GetAllRepositoriesResponse.Repositories();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("/_apis/git/repositories?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             viewModel = response.Content.ReadAsAsync<GetAllRepositoriesResponse.Repositories>().Result;
@@ -196,6 +202,7 @@ namespace AzureDevOpsAPI.Git
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("GetAllRepositories" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -235,7 +242,7 @@ namespace AzureDevOpsAPI.Git
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, Configuration.UriString + "/_apis/git/repositories?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -257,6 +264,7 @@ namespace AzureDevOpsAPI.Git
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("CreateRepository" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
 
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
@@ -288,7 +296,7 @@ namespace AzureDevOpsAPI.Git
                     using (var client = GetHttpClient())
                     {
                         var method = new HttpMethod("DELETE");
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + Project + "/_apis/git/repositories/" + repositoryId + "?api-version=" + Configuration.VersionNumber);
+                        var request = new HttpRequestMessage(method, Configuration.UriString + Project + "/_apis/git/repositories/" + repositoryId + "?api-version=" + Configuration.VersionNumber);
                         var response = client.SendAsync(request).Result;
 
                         return response.IsSuccessStatusCode;
@@ -296,6 +304,7 @@ namespace AzureDevOpsAPI.Git
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("DeleteRepository" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -331,7 +340,7 @@ namespace AzureDevOpsAPI.Git
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + Project + "/_apis/git/repositories/" + repositoryId + "/pullRequests?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, Project + "/_apis/git/repositories/" + repositoryId + "/pullRequests?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -353,6 +362,7 @@ namespace AzureDevOpsAPI.Git
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("CreatePullRequest" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -387,7 +397,7 @@ namespace AzureDevOpsAPI.Git
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + Project + "/_apis/git/repositories/" + repositorId + "/pullRequests/" + pullRequestId + "/threads?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, Project + "/_apis/git/repositories/" + repositorId + "/pullRequests/" + pullRequestId + "/threads?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -408,6 +418,7 @@ namespace AzureDevOpsAPI.Git
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("CreateCommentThread" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -442,7 +453,7 @@ namespace AzureDevOpsAPI.Git
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + Project + "/_apis/git/repositories/" + repositorId + "/pullRequests/" + pullRequestId + "/threads/" + threadId + "/comments?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, Project + "/_apis/git/repositories/" + repositorId + "/pullRequests/" + pullRequestId + "/threads/" + threadId + "/comments?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -463,6 +474,7 @@ namespace AzureDevOpsAPI.Git
                 }
                 catch (Exception ex)
                 {
+                    ai.TrackException(ex);
                     logger.Debug("AddCommentToThread" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
