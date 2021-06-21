@@ -7,13 +7,11 @@ using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.WorkItem;
 
-
 namespace AzureDevOpsAPI.WorkItemAndTracking
 {
     public partial class BoardColumn : ApiServiceBase
     {
         public string RowFieldName;
-        
         public BoardColumn(IAppConfiguration configuration) : base(configuration) { }
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
@@ -75,7 +73,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         // mediaType needs to be application/json-patch+json for a patch call
                         var method = new HttpMethod("PUT");
                         //PUT https://dev.azure.com/{organization}/{project}/{team}/_apis/work/boards/{board}/columns?api-version=4.1
-                        var request = new HttpRequestMessage(method, Configuration.UriString + "/" + projectName + "/" + teamName + "/_apis/work/boards/" + boardType + "/columns?api-version=" + Configuration.VersionNumber) { Content = patchValue };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/" + teamName + "/_apis/work/boards/" + boardType + "/columns?api-version=" + Configuration.VersionNumber) { Content = patchValue };
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -92,7 +90,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                   
                     logger.Debug("UpdateBoard" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -124,10 +121,11 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                     GetBoardColumnResponse.ColumnResponse columns = new GetBoardColumnResponse.ColumnResponse();
                     using (var client = GetHttpClient())
                     {
-                        var response = client.GetAsync(Configuration.UriString + "/" + projectName + "/" + teamName + "/_apis/work/boards/" + boardType + "?api-version=" + Configuration.VersionNumber).Result;
+                        var response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/" + teamName + "/_apis/work/boards/" + boardType + "?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             columns = response.Content.ReadAsAsync<GetBoardColumnResponse.ColumnResponse>().Result;
+                            this.RowFieldName = columns.Fields.RowField.ReferenceName;
                             return columns;
                         }
                         else
@@ -141,7 +139,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                  
                     logger.Debug("GetBoardColumns" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -168,10 +165,11 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                     using (var client = GetHttpClient())
                     {
 
-                        var response = client.GetAsync(Configuration.UriString + "/" + projectName + "/" + teamName + "/_apis/work/boards/Stories?api-version=" + Configuration.VersionNumber).Result;
+                        var response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/" + projectName + "/" + teamName + "/_apis/work/boards/Stories?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode)
                         {
                             columns = response.Content.ReadAsAsync<GetBoardColumnResponseAgile.ColumnResponse>().Result;
+                            this.RowFieldName = columns.Fields.RowField.ReferenceName;
                             return columns;
                         }
                         else
@@ -185,7 +183,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                   
                     logger.Debug("GetBoardColumnsAgile" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

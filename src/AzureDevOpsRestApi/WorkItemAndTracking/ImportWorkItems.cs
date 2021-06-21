@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.WorkItem;
 
-
 namespace AzureDevOpsAPI.WorkItemAndTracking
 {
     public class ImportWorkItems : ApiServiceBase
@@ -25,11 +24,9 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
         private string projectId = string.Empty;
         private Dictionary<string, string> pullRequests = new Dictionary<string, string>();
         Logger logger = LogManager.GetLogger("*");
-      
         public ImportWorkItems(IAppConfiguration configuration, string rowFieldName) : base(configuration)
         {
             boardRowFieldName = rowFieldName;
-          
         }
 
         /// <summary>
@@ -97,7 +94,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
             }
             catch (Exception ex)
             {
-               
                 logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                 return wiData;
             }
@@ -258,7 +254,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
             }
             catch (Exception ex)
             {
-              
                 logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
             }
             return false;
@@ -289,7 +284,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                     var postValue = new StringContent(JsonConvert.SerializeObject(fields), Encoding.UTF8, "application/json-patch+json"); // mediaType needs to be application/json-patch+json for a patch call
                     var method = new HttpMethod("PATCH");
                     // send the request               
-                    var request = new HttpRequestMessage(method, projectName + "/_apis/wit/workitems/$" + workItemType + "?bypassRules=true&api-version=" + Configuration.VersionNumber) { Content = postValue };
+                    var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + projectName + "/_apis/wit/workitems/$" + workItemType + "?bypassRules=true&api-version=" + Configuration.VersionNumber) { Content = postValue };
                     var response = client.SendAsync(request).Result;
                     if (response.IsSuccessStatusCode)
                     {
@@ -309,12 +304,10 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
             }
             catch (OperationCanceledException opr)
             {
-               
                 logger.Debug(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t OperationCanceledException: " + opr.Message + "\t" + "\n" + opr.StackTrace + "\n");
             }
             catch (Exception ex)
             {
-               
                 logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
             }
             return false;
@@ -367,7 +360,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                                             value = new
                                             {
                                                 rel = rel.Rel,
-                                                url = Configuration.UriString + "/_apis/wit/workitems/" + newWIID,
+                                                url = "https://dev.azure.com/" + Configuration.UriString + "/_apis/wit/workitems/" + newWIID + "?api-version=" + Configuration.VersionNumber,
                                                 attributes = new
                                                 {
                                                     comment = "Making a new link for the dependency"
@@ -449,7 +442,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
             }
             catch (Exception ex)
             {
-              
                 logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
             }
             return false;
@@ -471,7 +463,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                     var patchValue = new StringContent(JsonConvert.SerializeObject(patchWorkItem), Encoding.UTF8, "application/json-patch+json"); // mediaType needs to be application/json-patch+json for a patch call
 
                     var method = new HttpMethod("PATCH");
-                    var request = new HttpRequestMessage(method, Project + "/_apis/wit/workitems/" + witoUpdate + "?bypassRules=true&api-version=" + Configuration.VersionNumber) { Content = patchValue };
+                    var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + Project + "/_apis/wit/workitems/" + witoUpdate + "?bypassRules=true&api-version=" + Configuration.VersionNumber) { Content = patchValue };
                     var response = client.SendAsync(request).Result;
 
                     if (response.IsSuccessStatusCode)
@@ -483,7 +475,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
             }
             catch (Exception ex)
             {
-               
                 logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
             }
             return false;
@@ -510,7 +501,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                     {
                         ByteArrayContent content = new ByteArrayContent(bytes);
                         content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                        HttpResponseMessage uploadResponse = client.PostAsync("_apis/wit/attachments?fileName=" + _fileName + "&api-version=" + Configuration.VersionNumber, content).Result;
+                        HttpResponseMessage uploadResponse = client.PostAsync("https://dev.azure.com/" + Configuration.UriString + "_apis/wit/attachments?fileName=" + _fileName + "&api-version=" + Configuration.VersionNumber, content).Result;
 
                         if (uploadResponse.IsSuccessStatusCode)
                         {
@@ -523,7 +514,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
             }
             catch (Exception ex)
             {
-              
                 logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                 return string.Empty;
             }

@@ -8,12 +8,10 @@ using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.WorkItem;
 
-
 namespace AzureDevOpsAPI.WorkItemAndTracking
 {
     public partial class WorkItem : ApiServiceBase
     {
-     
         public WorkItem(IAppConfiguration configuration) : base(configuration) { }
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
@@ -60,7 +58,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         var method = new HttpMethod("POST");
 
                         // send the request
-                        var request = new HttpRequestMessage(method, "_apis/wit/$batch?api-version=" + Configuration.VersionNumber) { Content = newBatchRequest };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "_apis/wit/$batch?api-version=" + Configuration.VersionNumber) { Content = newBatchRequest };
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -77,7 +75,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                   
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -169,7 +166,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                                 var jsonContent = new StringContent(jsonUsers, Encoding.UTF8, "application/json-patch+json");
                                 var method = new HttpMethod("PATCH");
                                 // send the request
-                                request = new HttpRequestMessage(method, Configuration.UriString + "_apis/wit/workitems/" + id + "?bypassRules=true&api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                                request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "_apis/wit/workitems/" + id + "?bypassRules=true&api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                                 response = client.SendAsync(request).Result;
                                 if (response.IsSuccessStatusCode)
                                 {
@@ -190,7 +187,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                   
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -241,7 +237,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         var method = new HttpMethod("POST");
 
                         // send the request               
-                        var request = new HttpRequestMessage(method, "_apis/wit/wiql?api-version=" + Configuration.VersionNumber) { Content = postValue };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "_apis/wit/wiql?api-version=" + Configuration.VersionNumber) { Content = postValue };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -261,7 +257,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                  
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

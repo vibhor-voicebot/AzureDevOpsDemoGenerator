@@ -1,5 +1,4 @@
-﻿
-using NLog;
+﻿using NLog;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -9,8 +8,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
 {
     public class SwimLanes : ApiServiceBase
     {
-      
-        public SwimLanes(IAppConfiguration configuration) : base(configuration) {}
+        public SwimLanes(IAppConfiguration configuration) : base(configuration) { }
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Update swim lanes
@@ -30,7 +28,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         var patchValue = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("PUT");
 
-                        var request = new HttpRequestMessage(method, projectName + "/" + teamName + "/_apis/work/boards/" + boardType + "/rows?api-version=" + Configuration.VersionNumber) { Content = patchValue };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + projectName + "/" + teamName + "/_apis/work/boards/" + boardType + "/rows?api-version=" + Configuration.VersionNumber) { Content = patchValue };
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {
@@ -48,7 +46,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                  
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

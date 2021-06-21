@@ -6,12 +6,10 @@ using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.WorkItem;
 
-
 namespace AzureDevOpsAPI.WorkItemAndTracking
 {
     public class Cards : ApiServiceBase
     {
-        
         public Cards(IAppConfiguration configuration) : base(configuration) { }
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
@@ -34,7 +32,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         patchValue = new StringContent(json, Encoding.UTF8, "application/json"); // mediaType needs to be application/json-patch+json for a patch call
 
                         var method = new HttpMethod("PUT");
-                        string boardUrl = Configuration.UriString + projectName + "/" + teamName + "/_apis/work/boards/" + boardType + "/cardsettings?api-version=" + Configuration.VersionNumber;
+                        string boardUrl = "https://dev.azure.com/" + Configuration.UriString + projectName + "/" + teamName + "/_apis/work/boards/" + boardType + "/cardsettings?api-version=" + Configuration.VersionNumber;
                         var request = new HttpRequestMessage(method, boardUrl) { Content = patchValue };
                         var response = client.SendAsync(request).Result;
                         
@@ -51,7 +49,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                   
                     logger.Debug("UpdateCardField" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -108,7 +105,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                  
                     logger.Debug("ApplyRules" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -143,7 +139,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("PATCH");
                         string teamName = projectName + " Team";
-                        var request = new HttpRequestMessage(method, project + "/" + teamName + "/_apis/work/teamsettings?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + project + "/" + teamName + "/_apis/work/teamsettings?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         var response = client.SendAsync(request).Result;
 
                         if (response.IsSuccessStatusCode)
@@ -161,7 +157,6 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                   
                     logger.Debug("EnablingEpic" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

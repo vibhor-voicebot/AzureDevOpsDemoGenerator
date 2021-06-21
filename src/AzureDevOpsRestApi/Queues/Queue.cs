@@ -7,12 +7,10 @@ using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.Queue;
 
-
 namespace AzureDevOpsAPI.Queues
 {
     public class Queue : ApiServiceBase
     {
-      
         public Queue(IAppConfiguration configuration) : base(configuration) { }
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
@@ -58,7 +56,6 @@ namespace AzureDevOpsAPI.Queues
                 }
                 catch (Exception ex)
                 {
-                   
                     logger.Debug("CreateReleaseDefinition" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -114,7 +111,6 @@ namespace AzureDevOpsAPI.Queues
                 }
                 catch (Exception ex)
                 {
-                   
                     logger.Debug("CreateQueue" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

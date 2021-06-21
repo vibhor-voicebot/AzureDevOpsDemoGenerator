@@ -23,7 +23,7 @@ namespace AzureDevOpsAPI.DeploymentGRoup
                     {
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
-                        var request = new HttpRequestMessage(method, Configuration.UriString + Configuration.Project + "/_apis/distributedtask/deploymentgroups?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + Configuration.Project + "/_apis/distributedtask/deploymentgroups?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
                         HttpResponseMessage response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode)
                         {

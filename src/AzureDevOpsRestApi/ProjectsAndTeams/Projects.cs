@@ -1,4 +1,4 @@
-﻿using NLog;
+using NLog;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -11,12 +11,10 @@ using AzureDevOpsAPI.Extractor;
 using AzureDevOpsAPI.Viewmodel.Extractor;
 using AzureDevOpsAPI.Viewmodel.ProjectAndTeams;
 
-
 namespace AzureDevOpsAPI.ProjectsAndTeams
 {
     public class Projects : ApiServiceBase
     {
-       
         public Projects(IAppConfiguration configuration) : base(configuration) { }
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
@@ -33,14 +31,13 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     using (var client = GetHttpClient())
                     {
                         // connect to the REST endpoint            
-                        HttpResponseMessage response = client.GetAsync("_apis/projects?stateFilter=All&api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/projects?stateFilter=All&api-version=" + Configuration.VersionNumber).Result;
                         // check to see if we have a succesfull respond
                         return response.StatusCode == System.Net.HttpStatusCode.OK;
                     }
                 }
                 catch (Exception ex)
                 {
-                   
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
 
@@ -70,14 +67,13 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     using (var client = GetHttpClient())
                     {
                         // connect to the REST endpoint            
-                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/_apis/projects?stateFilter=wellFormed&$top=1000&api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/projects?stateFilter=wellFormed&$top=1000&api-version=" + Configuration.VersionNumber).Result;
                         // check to see if we have a succesfull respond
                         return response;
                     }
                 }
                 catch (Exception ex)
                 {
-                  
                     logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -110,7 +106,8 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                         var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
                         var method = new HttpMethod("POST");
 
-                        var request = new HttpRequestMessage(method, "_apis/projects?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        var request = new HttpRequestMessage(method, "https://dev.azure.com/" + Configuration.UriString + "/_apis/projects?api-version=" + Configuration.VersionNumber) { Content = jsonContent };
+                        request.Headers.Add("api-version", "5.0");
                         var response = client.SendAsync(request).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.Accepted)
                         {
@@ -138,7 +135,6 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (Exception ex)
                 {
-                   
                     logger.Info(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -168,7 +164,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("_apis/projects/" + projectName + "?includeCapabilities=false&api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/projects/" + projectName + "?includeCapabilities=false&api-version=" + Configuration.VersionNumber).Result;
 
                         if (response.IsSuccessStatusCode)
                         {
@@ -187,7 +183,6 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (Exception ex)
                 {
-                  
                     logger.Info(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -217,7 +212,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 {
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync("_apis/projects/" + project + "?includeCapabilities=true&api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/projects/" + project + "?includeCapabilities=true&api-version=" + Configuration.VersionNumber).Result;
 
                         if (response.IsSuccessStatusCode)
                         {
@@ -236,7 +231,6 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (TimeoutException timeout)
                 {
-                  
                     logger.Info(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t Time out: " + timeout.Message + "\t" + "\n" + timeout.StackTrace + "\n");
                     LastFailureMessage = timeout.Message + " ," + timeout.StackTrace;
                     retryCount++;
@@ -250,7 +244,6 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (OperationCanceledException opcan)
                 {
-                   
                     logger.Info(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t Operation Cancelled: " + opcan.Message + "\t" + "\n" + opcan.StackTrace + "\n");
                     LastFailureMessage = opcan.Message + " ," + opcan.StackTrace;
                     retryCount++;
@@ -264,7 +257,6 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (Exception ex)
                 {
-                   
                     logger.Info(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -290,7 +282,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                     ProjectProperties.Properties load = new ProjectProperties.Properties();
                     using (var client = GetHttpClient())
                     {
-                        HttpResponseMessage response = client.GetAsync(Configuration.UriString + "/_apis/projects/" + ProjectId + "/properties?api-version=" + Configuration.VersionNumber).Result;
+                        HttpResponseMessage response = client.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/projects/" + ProjectId + "/properties?api-version=" + Configuration.VersionNumber).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.OK)
                         {
                             string res = response.Content.ReadAsStringAsync().Result;
@@ -305,7 +297,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                             }
                             using (var client1 = GetHttpClient())
                             {
-                                HttpResponseMessage response1 = client1.GetAsync(Configuration.UriString + "/_apis/work/processes/" + processTypeId + "?api-version=" + Configuration.VersionNumber).Result;
+                                HttpResponseMessage response1 = client1.GetAsync("https://dev.azure.com/" + Configuration.UriString + "/_apis/work/processes/" + processTypeId + "?api-version=" + Configuration.VersionNumber).Result;
                                 if (response1.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.OK)
                                 {
                                     string templateData = response1.Content.ReadAsStringAsync().Result;
@@ -335,7 +327,6 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (Exception ex)
                 {
-                   
                     logger.Info(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

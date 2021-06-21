@@ -5,16 +5,13 @@ using System.Threading;
 using AzureDevOpsAPI.Viewmodel.Extractor;
 using NLog;
 
-
 namespace AzureDevOpsAPI.ExtensionManagement
 {
     public class GetListExtenison : ApiServiceBase
     {
         Logger logger = LogManager.GetLogger("*");
-       
         public GetListExtenison(IAppConfiguration configuration) : base(configuration)
         {
-         
         }
 
         //GET https://extmgmt.dev.azure.com/{organization}/_apis/extensionmanagement/installedextensions?api-version=4.1-preview.1
@@ -27,7 +24,7 @@ namespace AzureDevOpsAPI.ExtensionManagement
                 {
                     using (var client = GetHttpClient())
                     {
-                        var request = Configuration.UriString + "/_apis/extensionmanagement/installedextensions?api-version" + Configuration.VersionNumber;
+                        var request = "https://extmgmt.dev.azure.com/" + Configuration.UriString + "/_apis/extensionmanagement/installedextensions?api-version" + Configuration.VersionNumber;
                         HttpResponseMessage response = client.GetAsync(request).Result;
                         if (response.IsSuccessStatusCode && response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
@@ -46,7 +43,6 @@ namespace AzureDevOpsAPI.ExtensionManagement
                 }
                 catch (Exception ex)
                 {
-                   
                     logger.Debug(ex.Message + ex.StackTrace);
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
