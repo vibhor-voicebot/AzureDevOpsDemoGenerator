@@ -16,7 +16,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
     public partial class ClassificationNodes : ApiServiceBase
     {
         
-        public ClassificationNodes(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
+        public ClassificationNodes(IAppConfiguration configuration) : base(configuration) {  }
         Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Get Iteration
