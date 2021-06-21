@@ -1,5 +1,5 @@
 ﻿using AzureDevOpsRestApi.Viewmodel.GitHub;
-using Microsoft.ApplicationInsights;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -14,7 +14,7 @@ namespace AzureDevOpsAPI.Git
     public class GitHubImportRepo : ApiServiceBase
     {
         Logger logger = LogManager.GetLogger("*");
-        private TelemetryClient ai;
+       
         public GitHubImportRepo(IAppConfiguration configuration) : base(configuration)
         {
            

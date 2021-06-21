@@ -1,4 +1,4 @@
-﻿using Microsoft.ApplicationInsights;
+﻿
 using NLog;
 using System;
 using System.Net.Http;
@@ -9,7 +9,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
 {
     public class SwimLanes : ApiServiceBase
     {
-        private TelemetryClient ai;
+      
         public SwimLanes(IAppConfiguration configuration) : base(configuration) {}
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
