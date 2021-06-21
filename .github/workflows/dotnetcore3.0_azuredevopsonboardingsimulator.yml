@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - azuredevopsonboardingdemosimulator
+name: Build and deploy ASP.Net Core app to Azure Web App - azuredevopsonboardingsimulator
 
 on:
   push:
@@ -50,7 +50,7 @@ jobs:
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'azuredevopsonboardingdemosimulator'
+        app-name: 'azuredevopsonboardingsimulator'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_ad0f2a9018a74eebb68c1ddbc4bb09bb }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_243971ac5b4f42aeabd1b37a90a92205 }}
         package: .
