@@ -5,16 +5,16 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.Extractor;
-using Microsoft.ApplicationInsights;
+
 
 namespace AzureDevOpsAPI.Extractor
 {
     public class GetWorkItemsCount : ApiServiceBase
     {
-        private TelemetryClient ai;
-        public GetWorkItemsCount(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration)
+       // private TelemetryClient ai;
+        public GetWorkItemsCount(IAppConfiguration configuration) : base(configuration)
         {
-            ai = _ai;
+           
         }
          Logger logger = LogManager.GetLogger("*");
         public class WiMapData
@@ -83,7 +83,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   // ai.TrackException(ex);
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -133,7 +133,7 @@ namespace AzureDevOpsAPI.Extractor
                     }
                     catch (Exception ex)
                     {
-                        ai.TrackException(ex);
+                      
                         logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                         string error = ex.Message;
                         this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
@@ -180,7 +180,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

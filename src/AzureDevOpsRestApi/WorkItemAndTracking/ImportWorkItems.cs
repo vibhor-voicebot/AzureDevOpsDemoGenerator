@@ -10,7 +10,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.WorkItem;
-using Microsoft.ApplicationInsights;
+
 
 namespace AzureDevOpsAPI.WorkItemAndTracking
 {
@@ -25,11 +25,11 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
         private string projectId = string.Empty;
         private Dictionary<string, string> pullRequests = new Dictionary<string, string>();
         Logger logger = LogManager.GetLogger("*");
-        private TelemetryClient ai;
-        public ImportWorkItems(IAppConfiguration configuration, string rowFieldName, TelemetryClient _ai) : base(configuration)
+      
+        public ImportWorkItems(IAppConfiguration configuration, string rowFieldName) : base(configuration)
         {
             boardRowFieldName = rowFieldName;
-            ai = _ai;
+          
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+               
                 logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                 return wiData;
             }
@@ -258,7 +258,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+              
                 logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
             }
             return false;
@@ -309,12 +309,12 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
             }
             catch (OperationCanceledException opr)
             {
-                ai.TrackException(opr);
+               
                 logger.Debug(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t OperationCanceledException: " + opr.Message + "\t" + "\n" + opr.StackTrace + "\n");
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+               
                 logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
             }
             return false;
@@ -449,7 +449,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+              
                 logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
             }
             return false;
@@ -483,7 +483,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+               
                 logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
             }
             return false;
@@ -523,7 +523,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+              
                 logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                 return string.Empty;
             }

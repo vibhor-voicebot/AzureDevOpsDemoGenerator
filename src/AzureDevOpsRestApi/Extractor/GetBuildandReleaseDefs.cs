@@ -7,14 +7,14 @@ using System.Net.Http;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.Extractor;
 using AzureDevOpsAPI.Viewmodel.Queue;
-using Microsoft.ApplicationInsights;
+
 
 namespace AzureDevOpsAPI.Extractor
 {
     public class BuildandReleaseDefs : ApiServiceBase
     {
-        private TelemetryClient ai;
-        public BuildandReleaseDefs(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
+        
+        public BuildandReleaseDefs(IAppConfiguration configuration) : base(configuration) {}
          Logger logger = LogManager.GetLogger("*");
         //https://d2a2v2.visualstudio.com/selenium2/_apis/build/definitions?api-version=4.1
         // Get Build Definition count
@@ -44,7 +44,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -89,7 +89,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                  
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -132,7 +132,8 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
+                   
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -190,7 +191,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -234,7 +235,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -307,7 +308,7 @@ namespace AzureDevOpsAPI.Extractor
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -358,7 +359,7 @@ namespace AzureDevOpsAPI.Extractor
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+              
                 logger.Debug(ex.Message + "\n" + ex.StackTrace + "\n");
                 this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
             }

@@ -5,14 +5,14 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
-using Microsoft.ApplicationInsights;
+
 
 namespace AzureDevOpsAPI.TestManagement
 {
     public class TestManagement : ApiServiceBase
     {
-        private TelemetryClient ai;
-        public TestManagement(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
+     
+        public TestManagement(IAppConfiguration configuration) : base(configuration) {  }
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Create test plans
@@ -56,7 +56,7 @@ namespace AzureDevOpsAPI.TestManagement
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                  
                     logger.Debug("CreateTestPlan" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -119,7 +119,7 @@ namespace AzureDevOpsAPI.TestManagement
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug("CreatTestSuite" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -174,7 +174,7 @@ namespace AzureDevOpsAPI.TestManagement
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                  
                     logger.Debug("AddTestCasesToSuite" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

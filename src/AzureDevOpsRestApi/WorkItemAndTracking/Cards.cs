@@ -5,14 +5,14 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.WorkItem;
-using Microsoft.ApplicationInsights;
+
 
 namespace AzureDevOpsAPI.WorkItemAndTracking
 {
     public class Cards : ApiServiceBase
     {
-        private TelemetryClient ai;
-        public Cards(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
+        
+        public Cards(IAppConfiguration configuration) : base(configuration) { }
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Update Card fields
@@ -51,7 +51,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug("UpdateCardField" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -108,7 +108,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                  
                     logger.Debug("ApplyRules" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -161,7 +161,7 @@ namespace AzureDevOpsAPI.WorkItemAndTracking
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug("EnablingEpic" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

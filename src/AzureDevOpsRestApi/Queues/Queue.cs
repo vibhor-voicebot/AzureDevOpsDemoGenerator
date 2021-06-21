@@ -6,14 +6,14 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.Queue;
-using Microsoft.ApplicationInsights;
+
 
 namespace AzureDevOpsAPI.Queues
 {
     public class Queue : ApiServiceBase
     {
-        private TelemetryClient ai;
-        public Queue(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
+      
+        public Queue(IAppConfiguration configuration) : base(configuration) { }
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Get Agent queue
@@ -58,7 +58,7 @@ namespace AzureDevOpsAPI.Queues
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug("CreateReleaseDefinition" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -114,7 +114,7 @@ namespace AzureDevOpsAPI.Queues
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug("CreateQueue" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

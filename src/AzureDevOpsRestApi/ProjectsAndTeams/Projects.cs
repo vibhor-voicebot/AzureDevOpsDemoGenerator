@@ -10,14 +10,14 @@ using System.Threading;
 using AzureDevOpsAPI.Extractor;
 using AzureDevOpsAPI.Viewmodel.Extractor;
 using AzureDevOpsAPI.Viewmodel.ProjectAndTeams;
-using Microsoft.ApplicationInsights;
+
 
 namespace AzureDevOpsAPI.ProjectsAndTeams
 {
     public class Projects : ApiServiceBase
     {
-        private TelemetryClient ai;
-        public Projects(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
+       
+        public Projects(IAppConfiguration configuration) : base(configuration) { }
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Check for the existance of project
@@ -40,7 +40,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
 
@@ -77,7 +77,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                  
                     logger.Debug(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -138,7 +138,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Info(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -187,7 +187,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                  
                     logger.Info(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -236,7 +236,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (TimeoutException timeout)
                 {
-                    ai.TrackException(timeout);
+                  
                     logger.Info(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t Time out: " + timeout.Message + "\t" + "\n" + timeout.StackTrace + "\n");
                     LastFailureMessage = timeout.Message + " ," + timeout.StackTrace;
                     retryCount++;
@@ -250,7 +250,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (OperationCanceledException opcan)
                 {
-                    ai.TrackException(opcan);
+                   
                     logger.Info(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t Operation Cancelled: " + opcan.Message + "\t" + "\n" + opcan.StackTrace + "\n");
                     LastFailureMessage = opcan.Message + " ," + opcan.StackTrace;
                     retryCount++;
@@ -264,7 +264,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Info(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -335,7 +335,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Info(ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

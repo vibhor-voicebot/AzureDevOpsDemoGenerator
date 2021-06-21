@@ -6,14 +6,14 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.ReleaseDefinition;
-using Microsoft.ApplicationInsights;
+
 
 namespace AzureDevOpsAPI.Release
 {
     public class ReleaseDefinition : ApiServiceBase
     {
-        private TelemetryClient ai;
-        public ReleaseDefinition(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
+       
+        public ReleaseDefinition(IAppConfiguration configuration) : base(configuration) { }
         Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Create Release Definition
@@ -53,7 +53,7 @@ namespace AzureDevOpsAPI.Release
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                  
                     error = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t" + "CreateReleaseDefinition" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n";
                     logger.Debug(error);
 
@@ -95,7 +95,7 @@ namespace AzureDevOpsAPI.Release
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+               
                 logger.Debug(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t" + "CreateRelease" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
             }
             return false;
@@ -138,7 +138,7 @@ namespace AzureDevOpsAPI.Release
             }
             catch (Exception ex)
             {
-                ai.TrackException(ex);
+               
                 logger.Debug(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + "\t" + "GetEnvironmentIdsByName" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
             }
             return environmentIds;

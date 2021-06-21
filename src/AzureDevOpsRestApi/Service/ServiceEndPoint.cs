@@ -6,14 +6,14 @@ using System.Text;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.Extractor;
 using AzureDevOpsAPI.Viewmodel.Service;
-using Microsoft.ApplicationInsights;
+
 
 namespace AzureDevOpsAPI.Service
 {
     public class ServiceEndPoint : ApiServiceBase
     {
-        private TelemetryClient ai;
-        public ServiceEndPoint(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
+       
+        public ServiceEndPoint(IAppConfiguration configuration) : base(configuration) {  }
         Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Create service endpoints
@@ -55,7 +55,7 @@ namespace AzureDevOpsAPI.Service
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug("CreateServiceEndPoint" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
@@ -100,7 +100,7 @@ namespace AzureDevOpsAPI.Service
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug("GetServiceEndPoints" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;

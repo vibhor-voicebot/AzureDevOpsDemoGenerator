@@ -3,14 +3,14 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using AzureDevOpsAPI.Viewmodel.ProjectAndTeams;
-using Microsoft.ApplicationInsights;
+
 
 namespace AzureDevOpsAPI.ProjectsAndTeams
 {
     public class Accounts : ApiServiceBase
     {
-        private TelemetryClient ai;
-        public Accounts(IAppConfiguration configuration, TelemetryClient _ai) : base(configuration) { ai = _ai; }
+       
+        public Accounts(IAppConfiguration configuration) : base(configuration) { }
          Logger logger = LogManager.GetLogger("*");
         /// <summary>
         /// Get Account members
@@ -41,7 +41,7 @@ namespace AzureDevOpsAPI.ProjectsAndTeams
                 }
                 catch (Exception ex)
                 {
-                    ai.TrackException(ex);
+                   
                     logger.Debug("CreateReleaseDefinition" + "\t" + ex.Message + "\t" + "\n" + ex.StackTrace + "\n");
                     this.LastFailureMessage = ex.Message + " ," + ex.StackTrace;
                     retryCount++;
