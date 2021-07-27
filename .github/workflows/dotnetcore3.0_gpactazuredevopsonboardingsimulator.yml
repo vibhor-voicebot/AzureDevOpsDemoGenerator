@@ -53,4 +53,4 @@ jobs:
         app-name: gpactazuredevopsonboardingsimulator
         slot-name: Production
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_031FB970B37741D0AB3AE56B8C94FA48 }}
-        package: ${{env.DOTNET_ROOT}}/myapp
+        package: .
