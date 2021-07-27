@@ -313,7 +313,7 @@ namespace AzureDevOpsDemoBuilder.Controllers
                     }
                     string code = HttpContext.Request.Query["code"].ToString();
 
-                    string redirectUrl = "https://azuredevopsonboardingsimulator.azurewebsites.net/Environment/Create";
+                    string redirectUrl = "https://gpactazuredevopsonboardingsimulator.azurewebsites.net/Environment/Create";
                     string clientId = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Im9PdmN6NU1fN3AtSGpJS2xGWHo5M3VfVjBabyJ9.eyJjaWQiOiJhODhlMTBhMS05NGZiLTQ5NTAtOGRhNS0zOGM5OWU4NGRhZWQiLCJjc2kiOiJiZjQyYzBkYS00YTFjLTQ5YzYtYWM1YS0xZGU1MjFiMTdlNTEiLCJuYW1laWQiOiJiNGU2YTA5MC0zN2E4LTZmMjktYTVmYi1hODFhYTFhNzE2NGYiLCJpc3MiOiJhcHAudnN0b2tlbi52aXN1YWxzdHVkaW8uY29tIiwiYXVkIjoiYXBwLnZzdG9rZW4udmlzdWFsc3R1ZGlvLmNvbSIsIm5iZiI6MTYyNzM3NjI1MSwiZXhwIjoxNzg1MTQyNjUxfQ.3WLbkE6WrHagrhT-mTLEv9e1N6RUn5D0Wk6GMUd5TlmaAb-4tC7eRY3i175AdNTwCy9am4Sziw3JU0CZBi2s_kfFsCn8SLOq0ecYhz29G8TUX6KQYiOPCteBp9v1VWw1vGN5I5Rm7uDk1ULOS91k_nxNgvNazsWka2oGZ9pAQzrVwwdfsKV-KEJeewWhWGqInJrMQzSXKTU4UZ3j5rLV6FBg8lsLQMuvGc0N39HfcUj8hjXsOPp6CaOLbynBsPC5AIqqTHJtZmkef57EWJ0HAyQWm2QJwV-g8Rsmi1C4nm36qYm2jXSihjj-B0gxC--JXPIsMMxzxRD07keXpSQGSQ";
                     string accessRequestBody = accountService.GenerateRequestPostData(clientId, code, redirectUrl);
                     _accessDetails = accountService.GetAccessToken(accessRequestBody);

@@ -149,7 +149,7 @@ namespace AzureDevOpsDemoBuilder.Controllers
             {
                 HttpContext.Session.SetString("visited", "1");
                 string url = "https://app.vssps.visualstudio.com/oauth2/authorize?client_id={0}&response_type=Assertion&state=User1&scope={1}&redirect_uri={2}";
-                string redirectUrl = "https://azuredevopsonboardingsimulator.azurewebsites.net/Environment/Create";
+                string redirectUrl = "https://gpactazuredevopsonboardingsimulator.azurewebsites.net/Environment/Create";
                 string clientId = "A88E10A1-94FB-4950-8DA5-38C99E84DAED";
                 string AppScope = "vso.agentpools_manage vso.build_execute vso.code_manage vso.dashboards_manage vso.extension_manage vso.identity vso.project_manage vso.release_manage vso.serviceendpoint_manage vso.test_write vso.wiki_write vso.work_full";
                 url = string.Format(url, clientId, AppScope, redirectUrl);
