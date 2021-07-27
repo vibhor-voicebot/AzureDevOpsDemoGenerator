@@ -7,16 +7,14 @@ on:
   push:
     branches:
       - dotnetcore3.0
+  workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: windows-latest
 
     steps:
-    # checkout the repo
-    - name: 'Checkout Github Action'
-      uses: actions/checkout@master
-
+    - uses: actions/checkout@v2
 
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
@@ -29,7 +27,27 @@ jobs:
     - name: dotnet publish
       run: dotnet publish ./src/AzureDevOpsDemoBuilder/AzureDevOpsDemoBuilder.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v2
+      with:
+        name: .net-app
+        path: ${{env.DOTNET_ROOT}}/myapp
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v2
+      with:
+        name: .net-app
+        
     - name: Run Azure webapp deploy action using publish profile credentials
+      id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
         app-name: gpactazuredevopsonboardingsimulator
